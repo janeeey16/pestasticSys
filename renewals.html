@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pestastic — Payments</title>
+  <title>Pestastic — Renewals</title>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -27,13 +27,15 @@
     a{color:inherit;text-decoration:none}
     button{font-family:var(--font);cursor:pointer}
     input,select,textarea{font-family:var(--font);font-size:14px}
+
+    /* AUTH */
     #auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0f1b12 0%,#1a2e1d 50%,#0d1f0f 100%)}
     .auth-card{background:white;border-radius:var(--radius-lg);padding:48px 40px;width:100%;max-width:420px;box-shadow:var(--shadow-lg);text-align:center}
     .auth-logo{width:64px;height:64px;background:var(--primary-light);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
     .auth-logo svg{width:36px;height:36px}
     .auth-card h1{font-size:24px;font-weight:700;margin-bottom:4px}
     .auth-card>p{color:var(--text-muted);font-size:14px;margin-bottom:32px}
-    .btn-google{width:100%;padding:12px 20px;border:1.5px solid var(--border);background:white;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;gap:12px;font-size:15px;font-weight:500;color:var(--text);transition:all .15s;cursor:pointer}
+    .btn-google{width:100%;padding:12px 20px;border:1.5px solid var(--border);background:white;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;gap:12px;font-size:15px;font-weight:500;color:var(--text);cursor:pointer;transition:all .15s}
     .btn-google:hover{background:var(--bg-secondary)}
     .btn-google svg{width:20px;height:20px}
     .auth-error{margin-top:16px;padding:10px 14px;background:var(--red-bg);color:var(--red-text);border-radius:var(--radius-sm);font-size:13px;border:1px solid #fca5a5;display:none}
@@ -41,7 +43,11 @@
     .pending-icon svg{width:36px;height:36px;color:var(--amber)}
     .btn-pending-check{width:100%;padding:12px;background:var(--primary);color:white;border:none;border-radius:var(--radius);font-size:15px;font-weight:500;margin-bottom:12px;cursor:pointer}
     .btn-signout-pending{width:100%;padding:12px;background:transparent;color:var(--text-secondary);border:1.5px solid var(--border);border-radius:var(--radius);font-size:14px;cursor:pointer}
+
+    /* APP SHELL */
     #app-shell{display:none;height:100vh;overflow:hidden}
+
+    /* SIDEBAR */
     .sidebar{position:fixed;top:0;left:0;width:var(--sidebar-width);height:100vh;background:var(--sidebar-bg);display:flex;flex-direction:column;z-index:200;transition:transform .25s cubic-bezier(.4,0,.2,1);overflow:hidden}
     .sidebar-logo{display:flex;align-items:center;gap:10px;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
     .sidebar-logo-icon{width:36px;height:36px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -72,7 +78,9 @@
     .btn-signout:hover{color:var(--red);background:rgba(239,68,68,.1)}
     .btn-signout svg{width:16px;height:16px}
     .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199}
-    .main-wrapper{margin-left:var(--sidebar-width);width:calc(100vw - var(--sidebar-width));height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+    /* MAIN */
+    .main-wrapper{margin-left:var(--sidebar-width);width:calc(100vw - var(--sidebar-width));;height:100vh;display:flex;flex-direction:column;overflow:hidden}
     .topbar{height:var(--topbar-height);background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
     .hamburger{display:none;background:none;border:none;padding:6px;border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer}
     .hamburger svg{width:20px;height:20px}
@@ -80,10 +88,11 @@
     .topbar-spacer{flex:1}
     .topbar-btn{width:34px;height:34px;background:none;border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;position:relative}
     .topbar-btn svg{width:16px;height:16px}
-    .topbar-notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid white}
     .page-content{flex:1;overflow:hidden;padding:24px;display:flex;flex-direction:column}
     .page-content::-webkit-scrollbar{width:6px}
     .page-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    /* BUTTONS */
     .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:var(--radius);font-size:13.5px;font-weight:500;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
     .btn svg{width:15px;height:15px}
     .btn-primary{background:var(--primary);color:white}
@@ -96,9 +105,10 @@
     .btn-ghost:hover{background:var(--bg-secondary);color:var(--text)}
     .btn-sm{padding:5px 10px;font-size:12px}
     .btn-sm svg{width:13px;height:13px}
-    .btn-icon{padding:6px;border-radius:var(--radius);background:none;border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center}
-    .btn-icon:hover{background:var(--bg-secondary);color:var(--text)}
-    .btn-icon svg{width:14px;height:14px}
+    .btn-amber{background:var(--amber-bg);color:var(--amber-text);border:1px solid #fcd34d}
+    .btn-amber:hover{background:#fef3c7}
+
+    /* BADGES */
     .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
     .badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
     .badge-green{background:var(--green-bg);color:var(--green-text)}
@@ -107,23 +117,35 @@
     .badge-red{background:var(--red-bg);color:var(--red-text)}
     .badge-purple{background:var(--purple-bg);color:var(--purple-text)}
     .badge-gray{background:var(--gray-bg);color:var(--gray-text)}
+
+    /* PAGE */
     .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap;flex-shrink:0}
     .page-header-left h2{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
     .page-header-left p{font-size:13px;color:var(--text-muted);margin-top:3px}
     .page-header-right{display:flex;gap:8px;flex-wrap:wrap}
+
+    /* SUMMARY CARDS */
     .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;flex-shrink:0}
-    .sum-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;transition:box-shadow .15s,transform .15s}
+    .sum-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;transition:box-shadow .15s,transform .15s;cursor:default}
     .sum-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
     .sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
-    .sum-card.receivable::before{background:var(--blue)}
-    .sum-card.collected::before{background:var(--green)}
-    .sum-card.outstanding::before{background:var(--amber)}
-    .sum-card.overdue-card::before{background:var(--red)}
-    .sum-card-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
-    .sum-card-value{font-size:24px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
-    .sum-card-sub{font-size:12px;margin-top:6px;color:var(--text-muted)}
+    .sum-card.total-exp::before{background:var(--blue)}
+    .sum-card.renewed-c::before{background:var(--green)}
+    .sum-card.pending-c::before{background:var(--amber)}
+    .sum-card.declined-c::before{background:var(--red)}
+    .sum-card-label{font-size:11.5px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+    .sum-card-value{font-size:28px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.5px}
+    .sum-card-sub{font-size:12px;color:var(--text-muted);margin-top:6px}
     .sum-card-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);opacity:.07}
     .sum-card-icon svg{width:52px;height:52px}
+
+    /* DAYS FILTER TABS */
+    .days-filter{display:flex;align-items:center;gap:6px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:14px;width:fit-content;flex-shrink:0}
+    .days-btn{padding:6px 16px;border-radius:6px;font-size:13px;font-weight:500;border:none;cursor:pointer;color:var(--text-secondary);background:none;transition:all .15s;font-family:var(--font)}
+    .days-btn.active{background:var(--primary);color:white;font-weight:600}
+    .days-btn:hover:not(.active){background:var(--bg-secondary);color:var(--text)}
+
+    /* FILTERS */
     .filters-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;flex-shrink:0}
     .search-wrap{position:relative;flex:1;min-width:220px}
     .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--text-muted);pointer-events:none}
@@ -131,9 +153,8 @@
     .search-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.10)}
     .filter-select{padding:8px 32px 8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13.5px;background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") no-repeat right 8px center/16px;appearance:none;outline:none;cursor:pointer;color:var(--text)}
     .filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.10)}
-    .date-range{display:flex;align-items:center;gap:6px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:5px 10px}
-    .date-range input[type="date"]{border:none;font-size:13px;color:var(--text);outline:none;background:transparent;cursor:pointer}
-    .date-range span{font-size:12px;color:var(--text-muted)}
+
+    /* TABLE */
     .table-card{background:white;border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;overflow:hidden}
     .table-wrapper{overflow:auto;flex:1;min-height:0}
     table{width:100%;border-collapse:collapse}
@@ -144,14 +165,16 @@
     tbody td{padding:10px 14px;font-size:13.5px;color:var(--text);vertical-align:middle}
     td.muted{color:var(--text-muted);font-size:12.5px}
     td.mono{font-family:monospace;font-size:12.5px;color:var(--text-secondary)}
-    td.currency{font-variant-numeric:tabular-nums;font-weight:600}
-    .actions-cell{display:flex;align-items:center;gap:5px}
-    tbody tr.overdue-row{background:hsl(0,84%,99.2%)}
-    tbody tr.overdue-row:hover{background:hsl(0,84%,97%)}
-    tbody tr.virtual-row{background:hsl(220,9%,99%)}
-    tbody tr.virtual-row:hover{background:var(--bg-secondary)}
-    tbody tr.virtual-row td{color:var(--text-secondary)}
-    tbody tr.virtual-row td.currency{color:var(--text)}
+    .actions-cell{display:flex;align-items:center;gap:5px;flex-wrap:nowrap}
+
+    /* DAYS LEFT PILL */
+    .days-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+    .days-pill.critical{background:var(--red-bg);color:var(--red-text)}
+    .days-pill.warning{background:var(--amber-bg);color:var(--amber-text)}
+    .days-pill.ok{background:var(--green-bg);color:var(--green-text)}
+    .days-pill.overdue{background:var(--red-bg);color:var(--red-text)}
+
+    /* PAGINATION */
     .pagination{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-top:1px solid var(--border);background:white;flex-wrap:wrap;gap:10px}
     .pagination-info{font-size:13px;color:var(--text-muted)}
     .pagination-controls{display:flex;align-items:center;gap:4px}
@@ -159,6 +182,8 @@
     .page-btn:hover:not(:disabled){background:var(--bg-secondary);color:var(--text)}
     .page-btn.active{background:var(--primary);color:white;border-color:var(--primary);font-weight:600}
     .page-btn:disabled{opacity:.4;cursor:not-allowed}
+
+    /* FORMS */
     .form-group{margin-bottom:16px}
     .form-label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
     .form-label .req{color:var(--red);margin-left:2px}
@@ -166,32 +191,49 @@
     .form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:16px;padding-right:32px;cursor:pointer}
     .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.12)}
     .form-input::placeholder,.form-textarea::placeholder{color:var(--text-muted)}
-    .form-textarea{resize:vertical;min-height:72px}
+    .form-textarea{resize:vertical;min-height:80px}
     .form-hint{font-size:11.5px;color:var(--text-muted);margin-top:4px}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .form-row.three{grid-template-columns:1fr 1fr 1fr}
     .form-input[readonly]{background:var(--bg-secondary);color:var(--text-secondary)}
+    .form-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+    .form-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .form-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:12px}
+
+    /* MODAL */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
     .modal-overlay.open{opacity:1;pointer-events:all}
-    .modal{background:white;border-radius:var(--radius-lg);width:100%;max-width:600px;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);transform:translateY(10px) scale(.98);transition:transform .2s}
+    .modal{background:white;border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);transform:translateY(10px) scale(.98);transition:transform .2s}
     .modal-overlay.open .modal{transform:translateY(0) scale(1)}
+    .modal-lg{max-width:720px}
     .modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--border);flex-shrink:0}
     .modal-title{font-size:16px;font-weight:700;color:var(--text)}
+    .modal-subtitle{font-size:12px;color:var(--text-muted);margin-top:2px}
     .modal-close{width:30px;height:30px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:all .15s}
     .modal-close:hover{background:var(--bg-secondary);color:var(--text)}
     .modal-close svg{width:15px;height:15px}
     .modal-body{padding:22px;overflow-y:auto;flex:1}
     .modal-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid var(--border);flex-shrink:0}
-    .upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:28px 20px;text-align:center;cursor:pointer;transition:all .15s;background:var(--bg-secondary)}
-    .upload-zone:hover,.upload-zone.drag{border-color:var(--primary);background:var(--primary-light)}
-    .upload-zone svg{width:32px;height:32px;color:var(--text-muted);margin-bottom:10px}
-    .upload-zone p{font-size:13.5px;color:var(--text-secondary);margin-bottom:4px}
-    .upload-zone small{font-size:12px;color:var(--text-muted)}
-    .upload-preview{margin-top:14px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:12.5px}
+
+    /* CONTRACT PREVIEW IN RENEW MODAL */
+    .old-contract-banner{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:20px}
+    .old-contract-banner-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:10px}
+    .ocb-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px}
+    .ocb-item label{font-size:11px;color:var(--text-muted);display:block}
+    .ocb-item span{font-size:13px;font-weight:600;color:var(--text)}
+
+    /* SCHEDULE PREVIEW */
+    .schedule-preview{background:var(--green-bg);border:1px solid var(--primary-border);border-radius:var(--radius);padding:12px 16px;margin-top:12px}
+    .schedule-preview-title{font-size:12px;font-weight:700;color:var(--green-text);margin-bottom:6px}
+    .schedule-preview-text{font-size:12.5px;color:var(--green-text)}
+
+    /* EMPTY */
     .empty-state{text-align:center;padding:52px 20px}
     .empty-state svg{width:40px;height:40px;color:var(--text-muted);margin-bottom:14px;opacity:.5}
     .empty-state h3{font-size:15px;font-weight:600;margin-bottom:6px}
-    .empty-state p{font-size:13px;color:var(--text-muted);max-width:340px;margin:0 auto}
+    .empty-state p{font-size:13px;color:var(--text-muted);max-width:360px;margin:0 auto}
+
+    /* SPINNER / TOAST */
     .spinner{width:18px;height:18px;border:2.5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
     @keyframes spin{to{transform:rotate(360deg)}}
     #toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
@@ -205,59 +247,21 @@
     .toast-close svg{width:14px;height:14px}
     @keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 
-    /* NOTES THREAD */
-    .notes-section{margin-top:4px}
-    .notes-section-label{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-    .notes-section-label svg{width:14px;height:14px;color:var(--text-muted)}
-    .notes-count{font-size:11px;font-weight:500;color:var(--text-muted)}
-    .notes-list{max-height:200px;overflow-y:auto;margin-bottom:10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-secondary)}
-    .notes-list:empty::after{content:'No notes yet.';display:block;padding:16px;text-align:center;font-size:12.5px;color:var(--text-muted);font-style:italic}
-    .note-item{padding:10px 12px;border-bottom:1px solid var(--border)}
-    .note-item:last-child{border-bottom:none}
-    .note-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
-    .note-author{font-size:11.5px;font-weight:600;color:var(--primary)}
-    .note-time{font-size:10.5px;color:var(--text-muted)}
-    .note-text{font-size:13px;color:var(--text);line-height:1.45;word-break:break-word}
-    .notes-input-row{display:flex;gap:8px;align-items:flex-start}
-    .notes-input-row textarea{flex:1;min-height:40px;max-height:100px;resize:vertical;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
-    .notes-input-row textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.12)}
-    .notes-input-row textarea::placeholder{color:var(--text-muted)}
-    .btn-add-note{padding:8px 14px;background:var(--primary);color:white;border:none;border-radius:var(--radius);font-size:12.5px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .15s;height:40px}
-    .btn-add-note:hover{background:var(--primary-hover)}
-    .btn-add-note:disabled{opacity:.5;cursor:not-allowed}
-    .td-note{max-width:180px;font-size:12px;color:var(--text-secondary);line-height:1.35}
-    .td-note-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-    .td-note-meta{font-size:10px;color:var(--text-muted);margin-top:1px}
-
-    @media print {
-      #auth-screen,#app-shell .sidebar,.sidebar-overlay,.topbar,
-      .page-header-right,.filters-bar,.pagination,.actions-cell,
-      #toast-container,.modal-overlay{display:none!important}
-      #app-shell{display:block!important;height:auto!important;overflow:visible!important}
-      .main-wrapper{margin-left:0!important;height:auto!important;overflow:visible!important}
-      .page-content{padding:0!important;overflow:visible!important}
-      body{background:white!important}
-      .summary-grid{page-break-inside:avoid}
-      .table-card{border:none!important;border-radius:0!important}
-      .print-header{display:block!important}
-      thead th{background:white!important;border-bottom:2px solid #000!important;color:#000!important}
-    }
-    .print-header{display:none;text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #000}
-    .print-header h1{font-size:20px;font-weight:800}
-    .print-header p{font-size:13px;color:#555;margin-top:4px}
+    /* RESPONSIVE */
     @media(max-width:900px){.summary-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:1024px){
       .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
       .sidebar-overlay.open{display:block}.main-wrapper{margin-left:0}.hamburger{display:flex}
-      .form-row,.form-row.three{grid-template-columns:1fr}
+      .form-row,.form-row.three{grid-template-columns:1fr}.ocb-grid{grid-template-columns:1fr}
     }
-    @media(max-width:768px){.page-content{padding:16px}.filters-bar{flex-direction:column;align-items:stretch}}
-    .summary-grid.is-filtered .sum-card-label::after{content:'filtered';display:inline-block;margin-left:7px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--primary);color:white;padding:1px 5px;border-radius:3px;vertical-align:middle;opacity:.85}
-    .sum-card-filter-note{font-size:11.5px;color:var(--primary);font-weight:600;text-align:center;margin-top:-8px;margin-bottom:12px;display:none}
-    .sum-card-filter-note.visible{display:block}
+    @media(max-width:768px){.page-content{padding:16px}.filters-bar{flex-direction:column;align-items:stretch}.summary-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:480px){.summary-grid{grid-template-columns:1fr}}
+  
+    /* ── PAGE LOAD SCREEN ── */
     #loading-screen{position:fixed;inset:0;background:#0f1b12;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .25s}
     #loading-screen.fade-out{opacity:0;pointer-events:none}
     .ls-logo{width:60px;height:60px;background:hsl(142,76%,36%);border-radius:14px;display:flex;align-items:center;justify-content:center}
+    .ls-logo svg{width:34px;height:34px;color:white}
     .ls-spinner{width:28px;height:28px;border:3px solid rgba(255,255,255,.15);border-top-color:hsl(142,76%,60%);border-radius:50%;animation:spin .7s linear infinite}
     .ls-text{font-size:13px;color:rgba(255,255,255,.45);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:.02em}
 
@@ -298,12 +302,17 @@
 </head>
 <body>
 
+
+<!-- PAGE LOAD SCREEN — hides once Firebase auth resolves -->
 <div id="loading-screen">
-  <div class="ls-logo"><img src="logo.jpg" alt="Pestastic" style="width:34px;height:34px;object-fit:contain" /></div>
+  <div class="ls-logo">
+    <img src="logo.jpg" alt="Pestastic" style="width:34px;height:34px;object-fit:contain" />
+  </div>
   <div class="ls-spinner"></div>
   <div class="ls-text">Pestastic</div>
 </div>
 
+<!-- AUTH -->
 <div id="auth-screen" style="display:none">
   <div id="login-card" class="auth-card">
     <div class="auth-logo"><img src="logo.jpg" alt="Pestastic" style="width:36px;height:36px;object-fit:contain" /></div>
@@ -319,6 +328,7 @@
   </div>
 </div>
 
+<!-- APP SHELL -->
 <div id="app-shell">
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
   <aside class="sidebar" id="sidebar">
@@ -334,21 +344,21 @@
       <a class="nav-item" href="contracts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Contracts</a>
       <a class="nav-item" href="treatments.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Treatments</a>
       <div class="nav-section-label">Financial</div>
-      <a class="nav-item active" href="payments.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payments</a>
-      <a class="nav-item" href="renewals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Renewals</a>
+      <a class="nav-item" href="payments.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payments</a>
+      <a class="nav-item active" href="renewals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Renewals</a>
       <div class="nav-section-label">Service</div>
       <a class="nav-item" href="complaints.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Complaints<span class="nav-badge" id="badge-complaints" style="display:none"></span></a>
       <a class="nav-item" href="inspections.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Inspections<span class="nav-badge amber" id="badge-inspections" style="display:none"></span></a>
       <div class="nav-section-label">Monitoring</div>
       <a class="nav-item" href="overdue.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Overdue<span class="nav-badge" id="badge-overdue" style="display:none"></span></a>
-      <a class="nav-item" href="notification-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications<span class="nav-badge" id="notif-count-badge" style="display:none"></span></a>
-      <div class="nav-section-label">Reports</div>
+      <a class="nav-item" href="notification-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications<span class="nav-badge" id="badge-notifications" style="display:none"></span></a>
+            <div class="nav-section-label">Reports</div>
       <a class="nav-item" href="report-daily-schedule.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Daily Schedule</a>
       <a class="nav-item" href="report-service.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Service Report</a>
       <a class="nav-item" href="report-client-soa.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/></svg>Client SOA</a>
       <a class="nav-item" href="report-monthly-collection.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Monthly Collection</a>
       <a class="nav-item" href="report-overdue-treatments.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Overdue Report</a>
-      <div class="nav-section-label">Operations</div>
+<div class="nav-section-label">Operations</div>
       <a class="nav-item" href="teams.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Teams</a>
       <a class="nav-item" href="audit-log.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Audit Log</a>
       <div class="nav-section-label" id="admin-nav-label" style="display:none">Admin</div>
@@ -367,65 +377,96 @@
   <div class="main-wrapper">
     <header class="topbar">
       <button class="hamburger" id="hamburger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-      <span class="topbar-title">Payments</span>
+      <span class="topbar-title">Renewals</span>
       <div class="topbar-spacer"></div>
       <span id="last-updated" class="last-updated-badge" data-pc-topbar="1" style="font-size:12px;color:#9ca3af;margin-right:8px;white-space:nowrap"></span><button id="btn-refresh" class="topbar-btn" title="Refresh data" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></button><button class="topbar-btn" onclick="location.href='notification-calendar.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="topbar-notif-dot" id="notif-dot" style="display:none"></span></button>
     </header>
-    <main class="page-content" id="main-content">
-      <div class="print-header">
-        <h1>Pestastic Pest Control</h1>
-        <p>Payment Records — Printed <span id="print-date"></span></p>
-      </div>
+
+    <main class="page-content">
       <div class="page-header">
         <div class="page-header-left">
-          <h2>Payments</h2>
-          <p>Track all payment transactions and outstanding balances</p>
+          <h2>Renewals</h2>
+          <p>Monitor expiring contracts and manage renewal workflows</p>
         </div>
         <div class="page-header-right">
-          <button class="btn btn-secondary" id="btn-dl-template"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>CSV Template</button>
-          <button class="btn btn-secondary" id="btn-import-csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CSV</button>
-          <button class="btn btn-secondary" id="btn-export-csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
-          <button class="btn btn-secondary" id="btn-print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
-          <button class="btn btn-primary" id="btn-add-payment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Payment</button>
+          <button class="btn btn-secondary" id="btn-export-csv">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
         </div>
       </div>
-      <div class="sum-card-filter-note" id="filter-active-note"></div>
+
+      <!-- Summary cards -->
       <div class="summary-grid">
-        <div class="sum-card receivable"><div class="sum-card-label">Total Receivable</div><div class="sum-card-value" id="sc-receivable">—</div><div class="sum-card-sub" id="sc-receivable-sub">All payment records</div><div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
-        <div class="sum-card collected"><div class="sum-card-label">Total Collected</div><div class="sum-card-value" id="sc-collected" style="color:var(--green)">—</div><div class="sum-card-sub">Received + Deposited + Remitted</div><div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-        <div class="sum-card outstanding"><div class="sum-card-label">Outstanding Balance</div><div class="sum-card-value" id="sc-outstanding" style="color:var(--amber)">—</div><div class="sum-card-sub" id="sc-outstanding-sub">Receivable − collected</div><div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div></div>
-        <div class="sum-card overdue-card"><div class="sum-card-label">Overdue Payments</div><div class="sum-card-value" id="sc-overdue" style="color:var(--red)">—</div><div class="sum-card-sub" id="sc-overdue-sub">Past due, status = Pending</div><div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div></div>
+        <div class="sum-card total-exp">
+          <div class="sum-card-label">Total Expiring</div>
+          <div class="sum-card-value" id="sc-total">—</div>
+          <div class="sum-card-sub" id="sc-total-sub">Within window</div>
+          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        </div>
+        <div class="sum-card renewed-c">
+          <div class="sum-card-label">Renewed</div>
+          <div class="sum-card-value" id="sc-renewed" style="color:var(--green)">—</div>
+          <div class="sum-card-sub">Successfully renewed</div>
+          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+        </div>
+        <div class="sum-card pending-c">
+          <div class="sum-card-label">Pending</div>
+          <div class="sum-card-value" id="sc-pending" style="color:var(--amber)">—</div>
+          <div class="sum-card-sub">Awaiting action</div>
+          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        </div>
+        <div class="sum-card declined-c">
+          <div class="sum-card-label">Declined</div>
+          <div class="sum-card-value" id="sc-declined" style="color:var(--red)">—</div>
+          <div class="sum-card-sub">Not renewing</div>
+          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+        </div>
       </div>
+
+      <!-- Days filter tabs -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap">
+        <div class="days-filter" id="days-filter">
+          <button class="days-btn" data-days="30">30 days</button>
+          <button class="days-btn active" data-days="90">90 days</button>
+          <button class="days-btn" data-days="60">60 days</button>
+          <button class="days-btn" data-days="120">120 days</button>
+        </div>
+        <span style="font-size:13px;color:var(--text-muted)" id="window-label">Showing contracts expiring within 90 days</span>
+      </div>
+
+      <!-- Filters -->
       <div class="filters-bar">
-        <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" class="search-input" id="search-input" placeholder="Search client name, customer #, OR number…" /></div>
-        <div class="date-range"><input type="date" id="filter-date-from" title="Due date from" /><span>to</span><input type="date" id="filter-date-to" title="Due date to" /></div>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" id="search-input" placeholder="Search customer #, client name…" />
+        </div>
         <button class="btn btn-ghost btn-sm" id="btn-clear-filters">Clear</button>
       </div>
+
+      <!-- Table -->
       <div class="table-card" style="flex:1;min-height:0">
         <div class="table-wrapper" style="flex:1;overflow:auto;min-height:0">
-          <table id="payments-table">
+          <table>
             <thead>
               <tr>
                 <th class="col-header" data-sort="customerNo" data-col="customerNo"><div class="col-header-inner"><span>Customer No</span><span class="sort-icon" id="sort-customerNo"></span><button class="col-menu-btn" data-col="customerNo">▾</button></div></th>
                 <th class="col-header" data-sort="clientName" data-col="clientName"><div class="col-header-inner"><span>Client Name</span><span class="sort-icon" id="sort-clientName"></span><button class="col-menu-btn" data-col="clientName">▾</button></div></th>
-                <th class="col-header" data-sort="contractNo" data-col="contractNo"><div class="col-header-inner"><span>Contract No</span><span class="sort-icon" id="sort-contractNo"></span><button class="col-menu-btn" data-col="contractNo">▾</button></div></th>
-                <th class="col-header" data-sort="dueDate" data-col="dueDate"><div class="col-header-inner"><span>Due Date</span><span class="sort-icon" id="sort-dueDate">▼</span><button class="col-menu-btn" data-col="dueDate">▾</button></div></th>
-                <th class="col-header" data-sort="amount" data-col="amount"><div class="col-header-inner"><span>Amount (₱)</span><span class="sort-icon" id="sort-amount"></span><button class="col-menu-btn" data-col="amount">▾</button></div></th>
-                <th class="col-header" data-sort="orNumber" data-col="orNumber"><div class="col-header-inner"><span>OR No.</span><span class="sort-icon" id="sort-orNumber"></span><button class="col-menu-btn" data-col="orNumber">▾</button></div></th>
-                <th class="col-header" data-sort="paymentDate" data-col="paymentDate"><div class="col-header-inner"><span>Payment Date</span><span class="sort-icon" id="sort-paymentDate"></span><button class="col-menu-btn" data-col="paymentDate">▾</button></div></th>
-                <th class="col-header" data-sort="paymentMode" data-col="paymentMode"><div class="col-header-inner"><span>Mode</span><span class="sort-icon" id="sort-paymentMode"></span><button class="col-menu-btn" data-col="paymentMode">▾</button></div></th>
-                <th class="col-header" data-sort="status" data-col="status"><div class="col-header-inner"><span>Status</span><span class="sort-icon" id="sort-status"></span><button class="col-menu-btn" data-col="status">▾</button></div></th>
-                <th class="col-header" data-sort="receivedBy" data-col="receivedBy"><div class="col-header-inner"><span>Received By</span><span class="sort-icon" id="sort-receivedBy"></span><button class="col-menu-btn" data-col="receivedBy">▾</button></div></th>
-                <th class="col-header" data-col="recentNote"><div class="col-header-inner"><span>Recent Note</span><span class="sort-icon" id="sort-recentNote"></span><button class="col-menu-btn" data-col="recentNote">▾</button></div></th>
-                <th class="no-print">Actions</th>
+                <th class="col-header" data-sort="contractType" data-col="contractType"><div class="col-header-inner"><span>Contract Type</span><span class="sort-icon" id="sort-contractType"></span><button class="col-menu-btn" data-col="contractType">▾</button></div></th>
+                <th class="col-header" data-sort="contractEndDate" data-col="contractEndDate"><div class="col-header-inner"><span>End Date</span><span class="sort-icon" id="sort-contractEndDate"></span><button class="col-menu-btn" data-col="contractEndDate">▾</button></div></th>
+                <th class="col-header" data-sort="daysLeft" data-col="daysLeft"><div class="col-header-inner"><span>Days Left</span><span class="sort-icon" id="sort-daysLeft">▲</span><button class="col-menu-btn" data-col="daysLeft">▾</button></div></th>
+                <th class="col-header" data-sort="totalAmount" data-col="totalAmount"><div class="col-header-inner"><span>Amount (₱)</span><span class="sort-icon" id="sort-totalAmount"></span><button class="col-menu-btn" data-col="totalAmount">▾</button></div></th>
+                <th class="col-header" data-sort="salesAgent" data-col="salesAgent"><div class="col-header-inner"><span>Agent</span><span class="sort-icon" id="sort-salesAgent"></span><button class="col-menu-btn" data-col="salesAgent">▾</button></div></th>
+                <th class="col-header" data-sort="renewalStatus" data-col="renewalStatus"><div class="col-header-inner"><span>Renewal Status</span><span class="sort-icon" id="sort-renewalStatus"></span><button class="col-menu-btn" data-col="renewalStatus">▾</button></div></th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="payments-tbody">
-              <tr><td colspan="12" style="text-align:center;padding:48px"><div class="spinner" style="margin:0 auto"></div></td></tr>
+            <tbody id="renewals-tbody">
+              <tr><td colspan="9" style="text-align:center;padding:48px"><div class="spinner" style="margin:0 auto"></div></td></tr>
             </tbody>
           </table>
         </div>
-        <div class="pagination" id="pagination-wrap">
+        <div class="pagination">
           <span class="pagination-info" id="pagination-info">Loading…</span>
           <div class="pagination-controls" id="pagination-controls"></div>
         </div>
@@ -434,124 +475,174 @@
   </div>
 </div>
 
-<!-- ADD / EDIT PAYMENT MODAL -->
-<div class="modal-overlay" id="payment-form-modal">
-  <div class="modal" style="max-width:640px">
+<!-- ════════════════════════
+     UPDATE STATUS MODAL
+════════════════════════ -->
+<div class="modal-overlay" id="status-modal">
+  <div class="modal">
     <div class="modal-header">
-      <span class="modal-title" id="form-modal-title">Add Payment</span>
-      <button class="modal-close" data-close="payment-form-modal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div>
+        <div class="modal-title">Update Renewal Status</div>
+        <div class="modal-subtitle" id="status-modal-subtitle"></div>
+      </div>
+      <button class="modal-close" data-close="status-modal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <input type="hidden" id="form-payment-id" />
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Customer No <span class="req">*</span></label>
-          <input type="text" class="form-input" id="form-customer-no" placeholder="Type to search (e.g. PC-00001)" list="customer-datalist" autocomplete="off" />
-          <datalist id="customer-datalist"></datalist>
-          <div class="form-hint" id="customer-hint" style="color:var(--green-text);font-weight:500"></div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Contract <span class="req">*</span></label>
-          <select class="form-select" id="form-contract"><option value="">— Select Customer first —</option></select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Amount (₱) <span class="req">*</span></label>
-          <input type="number" class="form-input" id="form-amount" min="0" step="0.01" placeholder="0.00" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Due Date <span class="req">*</span></label>
-          <input type="date" class="form-input" id="form-due-date" />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Payment Date</label>
-          <input type="date" class="form-input" id="form-payment-date" />
-          <div class="form-hint">Leave blank if not yet paid</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Payment Mode</label>
-          <select class="form-select" id="form-mode"><option value="">— Select Mode —</option></select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">OR Number</label>
-          <input type="text" class="form-input" id="form-or-number" placeholder="Official Receipt No." />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Received By</label>
-          <select class="form-select" id="form-received-by"><option value="">— Select Agent —</option></select>
-        </div>
+      <input type="hidden" id="status-contract-id" />
+      <input type="hidden" id="status-renewal-id" />
+      <div class="form-group">
+        <label class="form-label">Renewal Status <span class="req">*</span></label>
+        <select class="form-select" id="status-select">
+          <option value="pending">Pending</option>
+          <option value="proposal-sent">Proposal Sent</option>
+          <option value="awaiting-response">Awaiting Response</option>
+          <option value="renewed">Renewed</option>
+          <option value="declined">Declined</option>
+        </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Status <span class="req">*</span></label>
-        <select class="form-select" id="form-status"><option value="Pending">Pending</option></select>
+        <label class="form-label">Proposal Amount (₱)</label>
+        <input type="number" class="form-input" id="status-proposal-amount" min="0" step="0.01" placeholder="Optional" />
       </div>
-      <!-- NOTES THREAD -->
-      <div class="notes-section">
-        <div class="notes-section-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Notes &amp; Remarks <span class="notes-count" id="notes-count"></span>
-        </div>
-        <div class="notes-list" id="notes-list"></div>
-        <div class="notes-input-row">
-          <textarea id="form-new-note" placeholder="Add a remark, comment, or note…" rows="2"></textarea>
-          <button type="button" class="btn-add-note" id="btn-add-note">Add</button>
-        </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="status-notes" placeholder="Add context or follow-up notes…"></textarea>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" data-close="payment-form-modal">Cancel</button>
-      <button class="btn btn-primary" id="btn-save-payment"><span id="save-btn-text">Save Payment</span></button>
+      <button class="btn btn-secondary" data-close="status-modal">Cancel</button>
+      <button class="btn btn-primary" id="btn-save-status">
+        <span id="status-btn-text">Save Status</span>
+      </button>
     </div>
   </div>
 </div>
 
-<!-- CSV IMPORT MODAL -->
-<div class="modal-overlay" id="csv-import-modal">
-  <div class="modal">
+<!-- ════════════════════════
+     RENEW CONTRACT MODAL
+════════════════════════ -->
+<div class="modal-overlay" id="renew-modal">
+  <div class="modal modal-lg">
     <div class="modal-header">
-      <span class="modal-title">Import Payments from CSV</span>
-      <button class="modal-close" data-close="csv-import-modal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div>
+        <div class="modal-title">Renew Contract</div>
+        <div class="modal-subtitle" id="renew-modal-subtitle"></div>
+      </div>
+      <button class="modal-close" data-close="renew-modal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <div style="background:var(--blue-bg);border:1px solid #93c5fd;border-radius:var(--radius);padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--blue-text)">
-        <strong>Required:</strong> customerNo, amount, dueDate<br>
-        <strong>Optional:</strong> contractId, paymentDate, paymentMode, orNumber, receivedBy, status, remarks
+      <input type="hidden" id="renew-old-contract-id" />
+
+      <!-- Old contract reference -->
+      <div class="old-contract-banner">
+        <div class="old-contract-banner-title">Expiring Contract Reference</div>
+        <div class="ocb-grid" id="ocb-grid"></div>
       </div>
-      <div class="upload-zone" id="csv-upload-zone">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <p>Drop CSV file here or click to browse</p><small>Only .csv files accepted</small>
-        <input type="file" accept=".csv" id="csv-file-input" style="display:none" />
-      </div>
-      <div class="upload-preview" id="upload-preview" style="display:none">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <strong id="preview-filename" style="font-size:13px"></strong>
-          <span id="preview-count" style="font-size:12px;color:var(--text-muted)"></span>
+
+      <div class="form-section">
+        <div class="form-section-title">New Contract Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Contract Type <span class="req">*</span></label>
+            <select class="form-select" id="renew-contract-type">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Treatment Method</label>
+            <input type="text" class="form-input" id="renew-treatment-method" placeholder="e.g. Chemical spraying" />
+          </div>
         </div>
-        <div style="max-height:160px;overflow-y:auto;font-size:12px" id="preview-table-wrap"></div>
+        <div class="form-row three">
+          <div class="form-group">
+            <label class="form-label">Frequency <span class="req">*</span></label>
+            <select class="form-select" id="renew-frequency">
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">No. of Sessions <span class="req">*</span></label>
+            <input type="number" class="form-input" id="renew-sessions" min="1" placeholder="e.g. 12" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Warranty Period (mo.)</label>
+            <input type="number" class="form-input" id="renew-warranty" min="0" placeholder="e.g. 6" />
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="form-group">
+            <label class="form-label">New Start Date <span class="req">*</span></label>
+            <input type="date" class="form-input" id="renew-start-date" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">New End Date</label>
+            <input type="date" class="form-input" id="renew-end-date" readonly />
+            <div class="form-hint">Auto-calculated</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Total Amount (₱) <span class="req">*</span></label>
+            <input type="number" class="form-input" id="renew-amount" min="0" step="0.01" placeholder="0.00" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Assignment</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Assigned Team</label>
+            <select class="form-select" id="renew-team"><option value="">— Select Team —</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sales Agent</label>
+            <select class="form-select" id="renew-agent"><option value="">— Select Agent —</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="renew-notes" placeholder="Any additional notes for the new contract…"></textarea>
+      </div>
+
+      <div id="renew-schedule-preview" style="display:none" class="schedule-preview">
+        <div class="schedule-preview-title">📅 New Schedule Preview</div>
+        <div id="renew-schedule-text" class="schedule-preview-text"></div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" data-close="csv-import-modal">Cancel</button>
-      <button class="btn btn-primary" id="btn-confirm-import" disabled><span id="import-btn-text">Import</span></button>
+      <button class="btn btn-secondary" data-close="renew-modal">Cancel</button>
+      <button class="btn btn-primary" id="btn-confirm-renew">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        <span id="renew-btn-text">Create New Contract</span>
+      </button>
     </div>
   </div>
 </div>
 
 <div id="toast-container"></div>
 
+<!-- ════════════════════════════════════
+     FIREBASE + APP LOGIC
+════════════════════════════════════ -->
+<script>
+function dismissLoadingScreen(){
+  const ls=document.getElementById('loading-screen');
+  if(!ls)return;
+  ls.classList.add('fade-out');
+  setTimeout(()=>{if(ls.parentNode)ls.parentNode.removeChild(ls);},280);
+}
+// Failsafe: force-dismiss loading screen after 6 seconds
+setTimeout(function(){ dismissLoadingScreen(); }, 6000);
+</script>
 <script type="module">
-function dismissLoadingScreen(){const ls=document.getElementById('loading-screen');if(!ls)return;ls.classList.add('fade-out');setTimeout(()=>{if(ls.parentNode)ls.parentNode.removeChild(ls);},280);}
-setTimeout(()=>dismissLoadingScreen(),6000);
-
-import{initializeApp}from'./js/db.js';
+import { initializeApp }   from './js/db.js';
 import { firebaseConfig } from './js/db.js';
-import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'./js/db.js';
-import{getFirestore,collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,query,orderBy,serverTimestamp,writeBatch}from'./js/db.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from './js/db.js';
+import {
+  getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc,
+  updateDoc, query, where, orderBy, serverTimestamp, writeBatch, runTransaction
+} from './js/db.js';
 import { app as _pcApp, auth as _pcAuth, db as _pcDb } from './js/db.js';
 import {
   cachedGetDocs, cachedGetDoc, smartAddDoc, smartUpdateDoc, smartDeleteDoc,
@@ -560,236 +651,247 @@ import {
 import { mountSidebarBadges } from './js/sidebarBadges.js';
 import { mountLastUpdated, wireRefreshButton } from './js/pageInit.js';
 
-
 /* Backend now centralized in js/db.js (native Supabase) */
 const app = _pcApp; const auth = _pcAuth; const db = _pcDb;
 
-let currentUser=null,currentRole=null;
-let allPayments=[],allPaymentRows=[],filteredPayments=[],clientMap={},contractsByCustomer={},contractMap={};
-let salesAgents=[],currentPage=1;
-const PER_PAGE=20;
-const COLLECTED_STATUSES=['Received','Deposited','Remitted','Collected'];
-let csvRows=[];
-let formNotes=[];
+/* ── State ── */
+let currentUser = null, currentRole = null;
+let allContracts = [], renewalMap = {}, clientMap = {}, teamsData = [], salesAgents = [];
+let filteredContracts = [], currentPage = 1;
+const PER_PAGE = 20;
+let daysWindow = 90;
 
-const $=id=>document.getElementById(id);
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+/* ── Helpers ── */
+const $ = id => document.getElementById(id);
 
-function showToast(msg,type='success',title=''){
-  const c=$('toast-container'),el=document.createElement('div');
+function showToast(msg, type='success', title='') {
+  const c=$('toast-container'), el=document.createElement('div');
   el.className=`toast ${type==='success'?'':type}`;
   const icons={success:`<svg viewBox="0 0 24 24" fill="none" stroke="hsl(142,76%,36%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,error:`<svg viewBox="0 0 24 24" fill="none" stroke="hsl(0,84%,50%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,warning:`<svg viewBox="0 0 24 24" fill="none" stroke="hsl(38,92%,50%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>`};
-  el.innerHTML=`<div class="toast-icon">${icons[type]||icons.success}</div><div class="toast-body"><div class="toast-title">${title||(type==='error'?'Error':type==='warning'?'Warning':'Saved')}</div><div class="toast-msg">${msg}</div></div><button class="toast-close" onclick="this.parentElement.remove()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
-  c.appendChild(el);setTimeout(()=>el.remove(),5000);
+  el.innerHTML=`<div class="toast-icon">${icons[type]||icons.success}</div><div class="toast-body"><div class="toast-title">${title||(type==='error'?'Error':type==='warning'?'Warning':'Done')}</div><div class="toast-msg">${msg}</div></div><button class="toast-close" onclick="this.parentElement.remove()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  c.appendChild(el); setTimeout(()=>el.remove(),5000);
 }
 
-function openModal(id){$(id).classList.add('open');}
-function closeModal(id){$(id).classList.remove('open');}
+function openModal(id)  { $(id).classList.add('open'); }
+function closeModal(id) { $(id).classList.remove('open'); }
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
 document.querySelectorAll('.modal-overlay').forEach(ov=>ov.addEventListener('click',e=>{if(e.target===ov)closeModal(ov.id);}));
 
-function fmtDate(v){if(!v)return'—';const d=v.toDate?v.toDate():new Date(v);if(isNaN(d))return'—';return d.toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'});}
-function fmtCur(n){return'₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function toDate(v){if(!v)return null;if(v.toDate)return v.toDate();const d=new Date(v);return isNaN(d)?null:d;}
-function toInputDate(v){const d=toDate(v);if(!d)return'';return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+/* ── KEY FIX: All date comparisons use LOCAL midnight, not UTC ── */
+function todayLocal() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+function toLocalDate(v) {
+  if (!v) return null;
+  if (v.toDate) {
+    const d = v.toDate();
+    // Return a LOCAL date with time zeroed
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+  if (v instanceof Date) return new Date(v.getFullYear(), v.getMonth(), v.getDate());
+  // Handle string
+  const s = String(v).trim();
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    const [y,m,d] = s.split('-').map(Number);
+    return new Date(y, m-1, d);
+  }
+  const d = new Date(v);
+  if (isNaN(d)) return null;
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+function daysLeft(endDate) {
+  const today = todayLocal();
+  const end = toLocalDate(endDate);
+  if (!end) return null;
+  return Math.round((end - today) / (1000 * 60 * 60 * 24));
+}
+
+function fmtDate(v) {
+  if(!v) return '—';
+  const d = toLocalDate(v);
+  if(!d) return '—';
+  return d.toLocaleDateString('en-PH', {year:'numeric', month:'short', day:'numeric'});
+}
+
+function fmtCur(n) {
+  return '₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
 function cleanName(n){return(n||'').replace(/\s*\(.*?\)\s*/g,'').trim()||'—';}
-function fmtNoteTime(v){if(!v)return'';const d=v.toDate?v.toDate():(v.seconds?new Date(v.seconds*1000):new Date(v));if(isNaN(d))return'';return d.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'})+' '+d.toLocaleTimeString('en-PH',{hour:'numeric',minute:'2-digit',hour12:true});}
-function addMonths(date,n){const d=new Date(date);d.setMonth(d.getMonth()+n);return d;}
-function getIntervalMonths(freq){return {monthly:1,'bi-monthly':2,quarterly:3,'semi-annual':6,annual:12,'one-time':null}[freq]||1;}
-function dispAmt(p){return Number(p.__displayAmount ?? p.amount ?? 0);}
 
-function isOverdue(p){const due=toDate(p.dueDate);const today=new Date();today.setHours(0,0,0,0);return p.status==='Pending'&&due&&due<today;}
-function statusBadge(p){if(isOverdue(p))return`<span class="badge badge-red">Overdue</span>`;const m={Pending:'amber',Received:'green',Deposited:'green',Remitted:'green',Collected:'green'};return`<span class="badge badge-${m[p.status]||'gray'}">${p.status||'—'}</span>`;}
+function daysPill(days) {
+  if (days === null) return '<span class="days-pill warning">Unknown</span>';
+  if (days < 0)  return `<span class="days-pill overdue">${Math.abs(days)}d overdue</span>`;
+  if (days <= 14) return `<span class="days-pill critical">${days}d left</span>`;
+  if (days <= 30) return `<span class="days-pill warning">${days}d left</span>`;
+  return `<span class="days-pill ok">${days}d left</span>`;
+}
 
-function getRecentNote(p){
-  const notes=p.notes||[];
-  if(!notes.length){if(p.remarks&&typeof p.remarks==='string'&&p.remarks.trim())return{text:p.remarks.trim(),author:'',timestamp:null};return null;}
-  return [...notes].sort((a,b)=>{const ta=a.timestamp?.seconds||(a.timestamp?new Date(a.timestamp).getTime()/1000:0);const tb=b.timestamp?.seconds||(b.timestamp?new Date(b.timestamp).getTime()/1000:0);return tb-ta;})[0];
+function renewalStatusBadge(s) {
+  const m={'pending':'amber','proposal-sent':'blue','awaiting-response':'purple','renewed':'green','declined':'red'};
+  const labels={'pending':'Pending','proposal-sent':'Proposal Sent','awaiting-response':'Awaiting Response','renewed':'Renewed','declined':'Declined'};
+  return `<span class="badge badge-${m[s]||'gray'}">${labels[s]||s||'Pending'}</span>`;
 }
 
 async function logAction(action,entityType,entityId,description){
-  try{await smartAddDoc(collection(db,'audit_log'),{action,entityType,entityId,description,performedBy:currentUser?.email||'unknown',performedByUid:currentUser?.uid||'',page:'payments',createdAt:serverTimestamp()});}
-  catch(err){console.error('[audit_log]',err.message);}
+  const entry={action,entityType,entityId,description,
+    performedBy:currentUser?.email||'unknown',
+    performedByUid:currentUser?.uid||'',
+    page:'renewals',createdAt:serverTimestamp()};
+  try{
+    await smartAddDoc(collection(db,'audit_log'),entry);
+  }catch(err){
+    console.error('[audit_log] Write failed (',err.code,'):',err.message,'\nEntry:',JSON.stringify({action,entityType,entityId,description,page:'renewals'}));
+  }
 }
 
-async function loadAll(){
-  const cSnap=await cachedGetDocs(collection(db,'clients'));
-  clientMap={};contractsByCustomer={};
-  const customerDL=[];
-  cSnap.forEach(d=>{const c=d.data();clientMap[c.customerNo]=c.clientName;customerDL.push(`<option value="${c.customerNo}">${c.customerNo} — ${cleanName(c.clientName)}</option>`);});
-  $('customer-datalist').innerHTML=customerDL.join('');
+/* ── Schedule helpers (reused from contracts.html) ── */
+function addMonths(date,n){const d=new Date(date);d.setMonth(d.getMonth()+n);return d;}
+function getIntervalMonths(freq){return {monthly:1,'bi-monthly':2,quarterly:3,'semi-annual':6,annual:12,'one-time':null}[freq]||1;}
+function computeEndDate(startDate,freq,sessions){
+  if(freq==='one-time')return new Date(startDate);
+  return addMonths(startDate,getIntervalMonths(freq)*(sessions-1));
+}
 
-  const coSnap=await cachedGetDocs(collection(db,'contracts'));
-  coSnap.forEach(d=>{
-    const c=d.data();
-    contractMap[d.id]={id:d.id,...c};
-    if(!contractsByCustomer[c.customerNo])contractsByCustomer[c.customerNo]=[];
-    contractsByCustomer[c.customerNo].push({id:d.id,...c});
+/* ── Get next contract number ── */
+async function getNextContractNo(){
+  let n=1;
+  await runTransaction(db,async tx=>{
+    const ref=doc(db,'config','counters');
+    const snap=await tx.get(ref);
+    if(!snap.exists()){tx.set(ref,{contractCounter:1});n=1;}
+    else{n=(snap.data().contractCounter||0)+1;tx.update(ref,{contractCounter:n});}
   });
+      await invalidateAfterWrite('clients', 'contracts', 'treatments', 'payments', 'complaints', 'inspections', 'renewals', 'teams', 'users', 'config');
+  return `CTR-${String(n).padStart(5,'0')}`;
+}
 
-  let paymentModes=[],paymentStatuses=['Pending','Received','Deposited','Remitted','Collected'];
-  try{const cfg=await cachedGetDoc(doc(db,'config','settings'));if(cfg.exists()){const s=cfg.data();salesAgents=s.salesAgents||[];if(s.paymentModes?.length)paymentModes=s.paymentModes;if(s.paymentStatuses?.length)paymentStatuses=s.paymentStatuses;}}catch{salesAgents=[];}
+/* ── Load data ── */
+async function loadAll() {
+  // Clients
+  const cSnap=await cachedGetDocs(collection(db,'clients'));
+  clientMap={};
+  const agentSet=new Set();
+  cSnap.forEach(d=>{const c=d.data();clientMap[c.customerNo]=c;if(c.salesAgent)agentSet.add(c.salesAgent);});
 
-  const agentSet=new Set(salesAgents);
-  cSnap.forEach(d=>{if(d.data().salesAgent)agentSet.add(d.data().salesAgent);});
+  // Teams
+  const tSnap=await cachedGetDocs(collection(db,'teams'));
+  teamsData=tSnap.docs.map(d=>({id:d.id,...d.data()}));
+  $('renew-team').innerHTML='<option value="">— Select Team —</option>'+teamsData.map(t=>`<option value="${t.teamName}">${t.teamName}</option>`).join('');
+
+  /* Load contract types & frequencies from settings */
+  let contractTypesFromSettings = [];
+  let contractFrequencies = [];
+  try {
+    const settingsSnap = await cachedGetDoc(doc(db,'config','settings'));
+    if (settingsSnap.exists()) {
+      const ss = settingsSnap.data();
+      contractTypesFromSettings = ss.contractTypesList || [];
+      contractFrequencies = ss.contractFrequencies || [];
+    }
+  } catch(e) { console.warn('Settings load failed:', e.message); }
+
+  /* Populate renew contract type select */
+  const rctEl = $('renew-contract-type');
+  if (rctEl) rctEl.innerHTML = (rctEl.querySelector('option[value=""]') ? '<option value="">— Select Type —</option>' : '') + contractTypesFromSettings.map(t => `<option>${t}</option>`).join('');
+
+  /* Populate renew-frequency */
+  $('renew-frequency').innerHTML = contractFrequencies.map(f => `<option value="${f.toLowerCase().replace(/\s+/g,'-')}">${f}</option>`).join('');
+
+
+  // Sales agents
+  try{const cfg=await cachedGetDoc(doc(db,'config','settings'));salesAgents=cfg.exists()?(cfg.data().salesAgents||[]):[];}catch{salesAgents=[];}
+  salesAgents.forEach(a=>agentSet.add(a));
   salesAgents=[...agentSet].filter(Boolean).sort();
-  $('form-received-by').innerHTML='<option value="">— Select Agent —</option>'+salesAgents.map(a=>`<option>${a}</option>`).join('');
-  const modeOpts=paymentModes.map(m=>`<option>${m}</option>`).join('');
-  $('form-mode').innerHTML='<option value="">— Select Mode —</option>'+modeOpts;
-  const statusOpts=paymentStatuses.map(s=>`<option value="${s}">${s}</option>`).join('');
-  $('form-status').innerHTML=statusOpts;
+  const agentOpts='<option value="">— Select Agent —</option>'+salesAgents.map(a=>`<option>${a}</option>`).join('');
+  $('renew-agent').innerHTML=agentOpts;
 
-  const pSnap=await cachedGetDocs(query(collection(db,'payments'),orderBy('dueDate','desc')));
-  allPayments=pSnap.docs.map(d=>({id:d.id,...d.data()}));
-  buildPaymentRows();
+  // Renewals map: contractId → renewal doc
+  const rSnap=await cachedGetDocs(collection(db,'renewals'));
+  renewalMap={};
+  rSnap.forEach(d=>{renewalMap[d.data().contractId]=d;});
+
+  // All contracts (not renewed/cancelled) — fetch ALL, filter client-side with LOCAL timezone
+  const coSnap=await cachedGetDocs(query(collection(db,'contracts'),orderBy('contractEndDate','asc')));
+  allContracts=coSnap.docs.map(d=>({id:d.id,...d.data()}))
+    .filter(c=>c.status!=='renewed'&&c.status!=='cancelled');
+
+  computeSummary();
   applyFilters();
 }
 
-/* ══════════════════════════════════
-   BUILD COMBINED PAYMENT ROWS
-   Mirrors contracts.html loadDetailPayments():
-   - real payments + synthesized virtuals (for contract sessions w/o records)
-   - redistributes remaining balance equally across unpaid sessions
-   - sets __displayAmount on each row (rendering/summary/sort/filter use this)
-   - NO Firebase reads/writes — operates purely on in-memory contractMap + allPayments
-══════════════════════════════════ */
-function buildPaymentRows(){
-  const today=new Date();today.setHours(0,0,0,0);
-  const byContract={};               // contractId → payment[]
-  const orphans=[];                  // payments with no contract or contract not in map
-  allPayments.forEach(p=>{
-    if(p.contractId && contractMap[p.contractId]){
-      (byContract[p.contractId]=byContract[p.contractId]||[]).push(p);
-    } else {
-      orphans.push({...p,__displayAmount:Number(p.amount||0)});
-    }
+function computeSummary() {
+  const today = todayLocal();
+  const windowEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysWindow);
+
+  let total=0, renewed=0, pending=0, declined=0;
+  allContracts.forEach(c=>{
+    const end = toLocalDate(c.contractEndDate);
+    // Include contracts expiring within window OR already expired (negative days)
+    if (!end) return;
+    if (end > windowEnd) return; // too far in future
+
+    total++;
+    const renewal = renewalMap[c.id];
+    const rs = renewal ? renewal.data().status : 'pending';
+    if (rs==='renewed') renewed++;
+    else if (rs==='declined') declined++;
+    else pending++;
   });
-
-  const rows=[];
-
-  // Iterate ALL contracts (not just those with payments) so we synthesize for contracts with zero records
-  Object.values(contractMap).forEach(c=>{
-    const real=(byContract[c.id]||[]).slice();
-    const totalAmt=Number(c.totalAmount||0);
-    const collected=real.filter(p=>COLLECTED_STATUSES.includes(p.status)).reduce((s,p)=>s+Number(p.amount||0),0);
-    const balance=Math.max(0,totalAmt-collected);
-
-    const paid=real.filter(p=>COLLECTED_STATUSES.includes(p.status));
-    const pending=real.filter(p=>!COLLECTED_STATUSES.includes(p.status));
-    const overdue=pending.filter(p=>{const d=toDate(p.dueDate);return d&&d<today;});
-    const upcoming=pending.filter(p=>{const d=toDate(p.dueDate);return !d||d>=today;});
-
-    // Synthesize virtual rows for missing sessions (only when balance > 0)
-    const totalSessions=Number(c.noOfSessions||0);
-    const existingCount=real.length;
-    if(totalSessions>existingCount && balance>0){
-      const startD=toDate(c.contractStartDate)||new Date();
-      const interval=getIntervalMonths(c.frequency);
-      for(let i=existingCount;i<totalSessions;i++){
-        const d=(c.frequency==='one-time')?new Date(startD):addMonths(startD,interval*i);
-        const v={
-          id:`__virtual_${c.id}_${i}`,
-          __virtual:true,
-          customerNo:c.customerNo,
-          contractId:c.id,
-          sessionNo:i+1,
-          amount:0,
-          dueDate:d,
-          paymentDate:null,
-          paymentMode:'',
-          orNumber:'',
-          receivedBy:'',
-          status:'Pending',
-          notes:[]
-        };
-        if(d<today) overdue.push(v); else upcoming.push(v);
-      }
-    }
-
-    // Redistribute remaining balance equally across ALL unpaid sessions (real + virtual)
-    const unpaid=[...overdue,...upcoming];
-    const unpaidCount=unpaid.length;
-    const redistributed={};
-    if(unpaidCount>0 && balance>0){
-      const per=parseFloat((balance/unpaidCount).toFixed(2));
-      let sum=0;
-      unpaid.forEach((p,i)=>{
-        if(i<unpaidCount-1){redistributed[p.id]=per;sum+=per;}
-        else redistributed[p.id]=parseFloat((balance-sum).toFixed(2));
-      });
-    } else if(unpaidCount>0 && balance===0){
-      unpaid.forEach(p=>{redistributed[p.id]=0;});
-    }
-
-    // Annotate and push
-    paid.forEach(p=>{p.__displayAmount=Number(p.amount||0);rows.push(p);});
-    unpaid.forEach(p=>{
-      const orig=Number(p.amount||0);
-      const rev=redistributed[p.id];
-      p.__displayAmount=(rev!==undefined)?rev:orig;
-      p.__redistributed=(rev!==undefined && Math.abs(rev-orig)>=0.01);
-      rows.push(p);
-    });
-  });
-
-  // Append orphan payments (no contract link) so we never hide real DB records
-  rows.push(...orphans);
-
-  allPaymentRows=rows;
+  $('sc-total').textContent=total;
+  $('sc-total-sub').textContent=`Within ${daysWindow} days`;
+  $('sc-renewed').textContent=renewed;
+  $('sc-pending').textContent=pending;
+  $('sc-declined').textContent=declined;
 }
 
-function hasActiveFilters(){return!!($('search-input').value.trim()||Object.keys(columnFilters).length||$('filter-date-from').value||$('filter-date-to').value);}
-
-function computeSummary(payments){
-  const set=payments||allPaymentRows,filtered=hasActiveFilters();
-  let receivable=0,collected=0,overdueAmt=0,overdueCount=0;
-  set.forEach(p=>{const amt=dispAmt(p);receivable+=amt;if(COLLECTED_STATUSES.includes(p.status))collected+=amt;if(isOverdue(p)){overdueAmt+=amt;overdueCount++;}});
-  const outstanding=Math.max(0,receivable-collected);
-  $('sc-receivable').textContent=fmtCur(receivable);
-  $('sc-receivable-sub').textContent=`${set.length} payment record${set.length===1?'':'s'}${filtered?' (filtered)':''}`;
-  $('sc-collected').textContent=fmtCur(collected);
-  $('sc-outstanding').textContent=fmtCur(outstanding);
-  $('sc-outstanding-sub').textContent=outstanding===0?'✓ Fully collected':'Receivable − collected';
-  $('sc-overdue').textContent=overdueCount;
-  $('sc-overdue-sub').textContent=`${fmtCur(overdueAmt)} past due`;
-  const grid=document.querySelector('.summary-grid'),note=$('filter-active-note');
-  if(filtered){
-    grid?.classList.add('is-filtered');
-    if(note){const parts=[];const q=$('search-input').value.trim();const df=$('filter-date-from').value;const dt=$('filter-date-to').value;if(q)parts.push(`search: "${q}"`);Object.entries(columnFilters).forEach(([col,vals])=>{parts.push(`${col}: ${[...vals].slice(0,3).join(', ')}${[...vals].length>3?'…':''}`);});if(df||dt)parts.push(`due date: ${df||'start'}${dt?' → '+dt:''}`);note.textContent=`Totals reflect ${set.length} filtered record${set.length===1?'':'s'} — ${parts.join(' · ')}`;note.classList.add('visible');}
-  }else{grid?.classList.remove('is-filtered');if(note){note.textContent='';note.classList.remove('visible');}}
-}
+/* ── Days filter ── */
+document.querySelectorAll('.days-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.days-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    daysWindow=Number(btn.dataset.days);
+    $('window-label').textContent=`Showing contracts expiring within ${daysWindow} days`;
+    computeSummary(); applyFilters();
+  });
+});
 
 /* ══════════════════════════════════
    COLUMN SORT + FILTER ENGINE
    (mirrors treatments.html behaviour)
 ══════════════════════════════════ */
-let sortField = 'dueDate', sortDir = 'desc';
+let sortField = 'daysLeft', sortDir = 'asc';
 let activeColDropdown = null;
 let columnFilters = {}; // { colName: Set of allowed values }
 
-const MODE_LABELS = {
-  'cash':'Cash','check':'Check','bank-transfer':'Bank Transfer',
-  'credit-card':'Credit Card','gcash':'GCash','maya':'Maya'
+const RENEWAL_STATUS_LABELS = {
+  'pending':'Pending','proposal-sent':'Proposal Sent',
+  'awaiting-response':'Awaiting Response','renewed':'Renewed','declined':'Declined'
 };
 
-function getColValue(p, col) {
-  if (col === 'customerNo')  return p.customerNo || '';
-  if (col === 'contractNo')  return contractMap[p.contractId]?.contractNumber || '';
-  if (col === 'clientName')  return cleanName(clientMap[p.customerNo] || '');
-  if (col === 'dueDate')     return fmtDate(p.dueDate);
-  if (col === 'amount')      return dispAmt(p);
-  if (col === 'orNumber')    return p.orNumber || '';
-  if (col === 'paymentDate') return fmtDate(p.paymentDate);
-  if (col === 'paymentMode') return MODE_LABELS[p.paymentMode] || p.paymentMode || '';
-  if (col === 'status')      return isOverdue(p) ? 'Overdue' : (p.status || '');
-  if (col === 'receivedBy')  return p.receivedBy || '';
+function getColValue(c, col) {
+  const renewal = renewalMap[c.id];
+  const renewalStatus = renewal ? renewal.data().status : 'pending';
+  const clientData = clientMap[c.customerNo];
+  if (col === 'customerNo')     return c.customerNo || '';
+  if (col === 'clientName')     return cleanName(clientData?.clientName || '');
+  if (col === 'contractType')   return c.contractType || '';
+  if (col === 'contractEndDate')return fmtDate(c.contractEndDate);
+  if (col === 'daysLeft')       return daysLeft(c.contractEndDate) ?? 9999;
+  if (col === 'totalAmount')    return Number(c.totalAmount) || 0;
+  if (col === 'salesAgent')     return c.salesAgent || clientData?.salesAgent || '';
+  if (col === 'renewalStatus')  return RENEWAL_STATUS_LABELS[renewalStatus] || renewalStatus;
   return '';
 }
 
 function getUniqueColValues(col) {
   const vals = new Set();
-  allPaymentRows.forEach(p => {
-    const v = getColValue(p, col).toString().trim();
+  allContracts.forEach(c => {
+    const v = getColValue(c, col).toString().trim();
     if (v && v !== '—') vals.add(v);
   });
   return [...vals].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
@@ -900,17 +1002,17 @@ document.querySelectorAll('th.col-header').forEach(th => {
 });
 
 function doSort() {
-  filteredPayments.sort((a, b) => {
+  filteredContracts.sort((a, b) => {
     let av, bv;
-    if (sortField === 'dueDate' || sortField === 'paymentDate') {
-      const da  = toDate(a[sortField]);
-      const db2 = toDate(b[sortField]);
+    if (sortField === 'daysLeft') {
+      av = daysLeft(a.contractEndDate) ?? 9999;
+      bv = daysLeft(b.contractEndDate) ?? 9999;
+    } else if (sortField === 'contractEndDate') {
+      const da  = toLocalDate(a.contractEndDate);
+      const db2 = toLocalDate(b.contractEndDate);
       av = da ? da.getTime() : 0; bv = db2 ? db2.getTime() : 0;
-    } else if (sortField === 'amount') {
-      av = dispAmt(a); bv = dispAmt(b);
-    } else if (sortField === 'contractNo') {
-      av = (contractMap[a.contractId]?.contractNumber||'').toLowerCase();
-      bv = (contractMap[b.contractId]?.contractNumber||'').toLowerCase();
+    } else if (sortField === 'totalAmount') {
+      av = Number(a.totalAmount)||0; bv = Number(b.totalAmount)||0;
     } else {
       av = getColValue(a, sortField).toString().toLowerCase();
       bv = getColValue(b, sortField).toString().toLowerCase();
@@ -923,273 +1025,415 @@ function doSort() {
   renderTable();
 }
 
-function applyFilters(){
-  const q=$('search-input').value.toLowerCase().trim();
-  const dateFrom=$('filter-date-from').value, dateTo=$('filter-date-to').value;
-  filteredPayments=allPaymentRows.filter(p=>{
-    const clientName=(clientMap[p.customerNo]||'').toLowerCase();
-    const contractNo=(contractMap[p.contractId]?.contractNumber||'').toLowerCase();
-    const matchQ=!q||[p.customerNo,clientName,(p.orNumber||''),(p.paymentMode||''),(p.status||''),(p.receivedBy||''),contractNo]
-      .some(f=>f.toLowerCase().includes(q));
-    // Date range filter (kept)
-    let matchD=true;
-    if(dateFrom||dateTo){const due=toDate(p.dueDate);if(due){if(dateFrom){const f=new Date(dateFrom);f.setHours(0,0,0,0);if(due<f)matchD=false;}if(dateTo){const t=new Date(dateTo);t.setHours(23,59,59,999);if(due>t)matchD=false;}}else matchD=false;}
+/* ── Filters ── */
+function applyFilters() {
+  const today = todayLocal();
+  const windowEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysWindow);
+  const q = $('search-input').value.toLowerCase().trim();
+
+  filteredContracts = allContracts.filter(c=>{
+    const end = toLocalDate(c.contractEndDate);
+    if (!end) return false;
+    if (end > windowEnd) return false; // days-window filter (kept)
+
+    const renewal = renewalMap[c.id];
+    const renewalStatus = renewal ? renewal.data().status : 'pending';
+    const clientData = clientMap[c.customerNo];
+    const clientName = cleanName(clientData?.clientName||'');
+
+    const matchQ = !q || [c.customerNo,clientName,c.contractType,c.contractNumber,
+      renewalStatus,c.salesAgent||clientData?.salesAgent||'']
+      .some(f=>(f||'').toLowerCase().includes(q));
+
     // Column header filters
-    let matchCol=true;
-    for(const [col,allowed] of Object.entries(columnFilters)){
-      if(!allowed.has(getColValue(p,col).toString().trim())){matchCol=false;break;}
+    let matchCol = true;
+    for (const [col, allowed] of Object.entries(columnFilters)) {
+      if (!allowed.has(getColValue(c, col).toString().trim())) { matchCol = false; break; }
     }
-    return matchQ&&matchD&&matchCol;
+
+    return matchQ && matchCol;
   });
-  currentPage=1;computeSummary(filteredPayments);doSort();
+
+  currentPage=1; doSort();
 }
 
-['search-input','filter-date-from','filter-date-to'].forEach(id=>{
-  $(id).addEventListener('input',applyFilters);
-  $(id).addEventListener('change',applyFilters);
-});
-$('btn-clear-filters').addEventListener('click',()=>{
-  $('search-input').value='';
-  $('filter-date-from').value='';
-  $('filter-date-to').value='';
-  columnFilters={};
-  document.querySelectorAll('thead th').forEach(th=>th.style.background='');
+$('search-input').addEventListener('input', applyFilters);
+
+$('btn-clear-filters').addEventListener('click', () => {
+  $('search-input').value = '';
+  columnFilters = {};
+  document.querySelectorAll('thead th').forEach(th => th.style.background = '');
   applyFilters();
 });
 
-document.getElementById('payments-tbody').addEventListener('click',function(e){
-  const editBtn=e.target.closest('.btn-edit');
-  if(editBtn&&editBtn.dataset.id){openEditModal(editBtn.dataset.id);return;}
-  const recBtn=e.target.closest('.btn-record');
-  if(recBtn&&recBtn.dataset.id){openRecordModal(recBtn.dataset.id);return;}
-});
-
-function renderTable(){
-  const total=filteredPayments.length,totalPages=Math.max(1,Math.ceil(total/PER_PAGE));
+/* ── Render table ── */
+function renderTable() {
+  const total=filteredContracts.length, totalPages=Math.max(1,Math.ceil(total/PER_PAGE));
   currentPage=Math.min(currentPage,totalPages);
-  const start=(currentPage-1)*PER_PAGE,end=Math.min(start+PER_PAGE,total),page=filteredPayments.slice(start,end);
-  $('pagination-info').textContent=total===0?'No records found':`Showing ${start+1}–${end} of ${total} payments`;
-  if(!page.length){$('payments-tbody').innerHTML=`<tr><td colspan="12"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><h3>No payments found</h3><p>Try adjusting your search or filters.</p></div></td></tr>`;$('pagination-controls').innerHTML='';return;}
-  $('payments-tbody').innerHTML=page.map(p=>{
-    const ov=isOverdue(p),clientName=cleanName(clientMap[p.customerNo]||p.customerNo||'—');
-    const contractNo=contractMap[p.contractId]?.contractNumber||p.contractId?.slice(0,8)?.toUpperCase()||'—';
-    const modeLabel={'cash':'Cash','check':'Check','bank-transfer':'Bank Transfer','credit-card':'Credit Card','gcash':'GCash','maya':'Maya'}[p.paymentMode]||p.paymentMode||'—';
-    const recent=getRecentNote(p);
-    const noteHtml=recent?`<div class="td-note"><span class="td-note-text" title="${esc(recent.text)}">${esc(recent.text)}</span><span class="td-note-meta">${recent.author?esc(recent.author):''}${recent.author&&recent.timestamp?' · ':''}${recent.timestamp?fmtNoteTime(recent.timestamp):''}</span></div>`:'<span style="color:var(--text-muted);font-size:12px">—</span>';
+  const start=(currentPage-1)*PER_PAGE, end=Math.min(start+PER_PAGE,total);
+  const page=filteredContracts.slice(start,end);
 
-    // Amount cell — show redistributed amount with original strikethrough if changed
-    const displayAmt=dispAmt(p);
-    const origAmt=Number(p.amount||0);
-    const showOrig=p.__redistributed && !p.__virtual && Math.abs(displayAmt-origAmt)>=0.01;
-    const amtCell=showOrig
-      ? `<div style="font-weight:600;color:${ov?'var(--red-text)':'var(--blue-text)'}">${fmtCur(displayAmt)}</div><div style="font-size:10.5px;color:var(--text-muted);text-decoration:line-through;margin-top:1px">${fmtCur(origAmt)}</div>`
-      : fmtCur(displayAmt);
+  $('pagination-info').textContent=total===0?'No records found':`Showing ${start+1}–${end} of ${total} contracts`;
 
-    // Action button: real → Edit; virtual → Record
-    const actionBtn=p.__virtual
-      ? `<button class="btn btn-sm btn-secondary btn-record" data-id="${p.id}" title="Create a payment record for this scheduled session"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Record</button>`
-      : `<button class="btn btn-sm btn-secondary btn-edit" data-id="${p.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>`;
+  if(!page.length){
+    $('renewals-tbody').innerHTML=`<tr><td colspan="9"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><h3>No expiring contracts</h3><p>No contracts are expiring within the selected window. Try increasing the days filter or checking your data.</p></div></td></tr>`;
+    $('pagination-controls').innerHTML=''; return;
+  }
 
-    // Subtle "Scheduled" tag for virtual rows
-    const virtualTag=p.__virtual?` <span style="display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:var(--gray-bg);color:var(--gray-text);padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px">Scheduled</span>`:'';
+  $('renewals-tbody').innerHTML=page.map(c=>{
+    const renewal = renewalMap[c.id];
+    const renewalStatus = renewal ? renewal.data().status : 'pending';
+    const dl = daysLeft(c.contractEndDate);
+    const clientData = clientMap[c.customerNo];
+    const clientName = cleanName(clientData?.clientName||c.customerNo||'—');
+    const isAlreadyRenewed = renewalStatus==='renewed';
 
-    const rowClass=ov?'overdue-row':(p.__virtual?'virtual-row':'');
-
-    return`<tr class="${rowClass}">
-      <td class="mono">${p.customerNo||'—'}${virtualTag}</td>
-      <td style="max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${clientName}"><a href="report-client-soa.html?customer=${p.customerNo}" target="_blank" style="font-weight:600;color:var(--primary);text-decoration:none;cursor:pointer" title="Open SOA for ${clientName}">${clientName}</a></td>
-      <td class="mono" style="font-size:12px">${contractNo}</td>
-      <td style="white-space:nowrap${ov?';color:var(--red-text);font-weight:600':''}">${fmtDate(p.dueDate)}</td>
-      <td class="currency">${amtCell}</td>
-      <td class="mono" style="font-size:12px">${p.orNumber||'—'}</td>
-      <td class="muted">${fmtDate(p.paymentDate)||'—'}</td>
-      <td class="muted" style="font-size:12.5px">${modeLabel}</td>
-      <td>${statusBadge(p)}</td>
-      <td class="muted">${p.receivedBy||'—'}</td>
-      <td>${noteHtml}</td>
-      <td class="no-print"><div class="actions-cell">${actionBtn}</div></td>
+    return `<tr>
+      <td class="mono">${c.customerNo||'—'}</td>
+      <td style="font-weight:500;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${clientName}">${clientName}</td>
+      <td style="font-size:12.5px">${c.contractType||'—'}</td>
+      <td style="white-space:nowrap${dl!==null&&dl<0?';color:var(--red-text);font-weight:600':''}">${fmtDate(c.contractEndDate)}</td>
+      <td>${daysPill(dl)}</td>
+      <td style="font-variant-numeric:tabular-nums;font-weight:600">${fmtCur(c.totalAmount)}</td>
+      <td class="muted">${c.salesAgent||clientData?.salesAgent||'—'}</td>
+      <td>${renewalStatusBadge(renewalStatus)}</td>
+      <td>
+        <div class="actions-cell">
+          ${!isAlreadyRenewed ? `
+            <button class="btn btn-sm btn-primary btn-renew" data-id="${c.id}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Renew
+            </button>
+          ` : `<span style="font-size:12px;color:var(--green-text);font-weight:600">✓ Renewed</span>`}
+          <button class="btn btn-sm btn-secondary btn-update-status" data-id="${c.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Status
+          </button>
+        </div>
+      </td>
     </tr>`;
   }).join('');
+
+  // ── Bind action buttons (MUST be before pagination return) ──
+  document.querySelectorAll('.btn-update-status').forEach(b=>b.addEventListener('click',()=>openStatusModal(b.dataset.id)));
+  document.querySelectorAll('.btn-renew').forEach(b=>b.addEventListener('click',()=>openRenewModal(b.dataset.id)));
+
+  // Pagination
   const ctrl=$('pagination-controls');
   if(totalPages<=1){ctrl.innerHTML='';return;}
-  const pages=[];for(let i=1;i<=totalPages;i++){if(i===1||i===totalPages||(i>=currentPage-1&&i<=currentPage+1))pages.push(i);else if(pages[pages.length-1]!=='…')pages.push('…');}
+  const pages=[];
+  for(let i=1;i<=totalPages;i++){if(i===1||i===totalPages||(i>=currentPage-1&&i<=currentPage+1))pages.push(i);else if(pages[pages.length-1]!=='…')pages.push('…');}
   ctrl.innerHTML=`<button class="page-btn" ${currentPage<=1?'disabled':''} data-p="${currentPage-1}">‹</button>${pages.map(p=>p==='…'?`<button class="page-btn" disabled>…</button>`:`<button class="page-btn${p===currentPage?' active':''}" data-p="${p}">${p}</button>`).join('')}<button class="page-btn" ${currentPage>=totalPages?'disabled':''} data-p="${currentPage+1}">›</button>`;
   ctrl.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>{currentPage=Number(b.dataset.p);renderTable();}));
 }
 
-function renderNotesThread(){
-  const list=$('notes-list'),count=$('notes-count');
-  count.textContent=formNotes.length?`(${formNotes.length})`:'';
-  if(!formNotes.length){list.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--text-muted);font-style:italic">No notes yet. Add the first note below.</div>';return;}
-  const sorted=[...formNotes].sort((a,b)=>{const ta=a.timestamp?.seconds||(a.timestamp?new Date(a.timestamp).getTime()/1000:0);const tb=b.timestamp?.seconds||(b.timestamp?new Date(b.timestamp).getTime()/1000:0);return tb-ta;});
-  list.innerHTML=sorted.map(n=>`<div class="note-item"><div class="note-item-header"><span class="note-author">${esc(n.author||'Unknown')}</span><span class="note-time">${fmtNoteTime(n.timestamp)}</span></div><div class="note-text">${esc(n.text)}</div></div>`).join('');
-  list.scrollTop=0;
+
+/* ── Build contracts page URL for renewal redirect ── */
+function buildRenewalUrl(contract) {
+  const p = new URLSearchParams({
+    mode:         'renewal',
+    oldId:        contract.id,
+    oldNo:        contract.contractNumber || '',
+    oldEnd:       contract.contractEndDate
+      ? (contract.contractEndDate.toDate
+          ? contract.contractEndDate.toDate().toISOString().slice(0,10)
+          : String(contract.contractEndDate).slice(0,10))
+      : '',
+    customerNo:   contract.customerNo   || '',
+    contractType: contract.contractType  || '',
+    method:       contract.treatmentMethod || '',
+    frequency:    contract.frequency    || '',
+    sessions:     contract.noOfSessions || '',
+    warranty:     contract.warrantyPeriod || '',
+    amount:       contract.totalAmount  || '',
+    team:         contract.assignedTeam || '',
+    agent:        contract.salesAgent   || '',
+  });
+  return 'contracts.html?' + p.toString();
 }
 
-$('btn-add-note').addEventListener('click',async()=>{
-  const text=$('form-new-note').value.trim();if(!text)return;
-  const entry={text,author:currentUser?.displayName||currentUser?.email||'Unknown',timestamp:new Date()};
-  const editId=$('form-payment-id').value;
-  if(editId){
-    const payment=allPayments.find(x=>x.id===editId);
-    if(payment){
-      const existing=Array.isArray(payment.notes)?[...payment.notes]:[];
-      existing.push(entry);
-      await smartUpdateDoc(doc(db,'payments',editId),{notes:existing,updatedAt:serverTimestamp()});
-      payment.notes=existing;formNotes=existing;renderNotesThread();buildPaymentRows();applyFilters();showToast('Note added.');
+/* ── Update Status Modal ── */
+function openStatusModal(contractId) {
+  const c=allContracts.find(x=>x.id===contractId); if(!c) return;
+  const renewal=renewalMap[contractId];
+  const clientName=cleanName(clientMap[c.customerNo]?.clientName||'—');
+  $('status-contract-id').value=contractId;
+  $('status-renewal-id').value=renewal?renewal.id:'';
+  $('status-modal-subtitle').textContent=`${clientName} · ${c.contractType||''}`;
+  $('status-select').value=renewal?renewal.data().status:'pending';
+  $('status-proposal-amount').value=renewal?renewal.data().proposalAmount||'':'';
+  $('status-notes').value=renewal?renewal.data().notes||'':'';
+  $('status-btn-text').textContent='Save Status';
+  openModal('status-modal');
+}
+
+$('btn-save-status').addEventListener('click', async()=>{
+  const contractId=$('status-contract-id').value;
+  const renewalId=$('status-renewal-id').value;
+  const status=$('status-select').value;
+  const proposalAmount=parseFloat($('status-proposal-amount').value)||null;
+  const notes=$('status-notes').value.trim();
+
+  const btn=$('btn-save-status'); btn.disabled=true; $('status-btn-text').textContent='Saving…';
+
+  // If marking as Renewed, redirect to contracts page to create the new contract properly
+  if(status === 'renewed') {
+    const c = allContracts.find(x=>x.id===contractId);
+    if(c) {
+      // Save the 'renewed' status first so it's recorded
+      try {
+        const renewData={contractId, status:'renewed', proposalAmount, notes, updatedAt:serverTimestamp()};
+        if(renewalId) {
+          await smartUpdateDoc(doc(db,'renewals',renewalId), renewData);
+        } else {
+          const c2=allContracts.find(x=>x.id===contractId);
+          renewData.customerNo=c2?.customerNo||'';
+          renewData.createdAt=serverTimestamp();
+          await smartAddDoc(collection(db,'renewals'), renewData);
+        }
+      } catch {}
+      closeModal('status-modal');
+      // Navigate to contracts page to create the renewal contract
+      window.location.href = buildRenewalUrl(c);
+      return;
     }
-  }else{formNotes.push(entry);renderNotesThread();}
-  $('form-new-note').value='';
-});
+  }
 
-$('form-customer-no').addEventListener('input',()=>{const no=$('form-customer-no').value.trim();const name=clientMap[no];$('customer-hint').textContent=name?`✓ ${cleanName(name)}`:(no?'Client not found':'');loadContractsForCustomer(no);});
-
-function loadContractsForCustomer(customerNo){
-  const contracts=contractsByCustomer[customerNo]||[];
-  if(!contracts.length){$('form-contract').innerHTML='<option value="">— No contracts found —</option>';return;}
-  const today=new Date();today.setHours(0,0,0,0);
-  $('form-contract').innerHTML='<option value="">— Select Contract —</option>'+contracts.map(c=>{const end=toDate(c.contractEndDate);const dispS=(c.status==='active'&&end&&end<today)?'expired':c.status;return`<option value="${c.id}">${c.contractNumber||c.id.slice(0,8)} — ${c.contractType} (${dispS})</option>`;}).join('');
-}
-
-$('btn-add-payment').addEventListener('click',()=>{clearForm();$('form-modal-title').textContent='Add Payment';$('save-btn-text').textContent='Save Payment';$('form-payment-id').value='';formNotes=[];renderNotesThread();openModal('payment-form-modal');});
-
-function openEditModal(id){
-  const p=allPaymentRows.find(x=>x.id===id);if(!p||p.__virtual)return;
-  clearForm();
-  $('form-modal-title').textContent='Edit Payment';$('save-btn-text').textContent='Update Payment';
-  $('form-payment-id').value=id;$('form-customer-no').value=p.customerNo||'';
-  const name=clientMap[p.customerNo];$('customer-hint').textContent=name?`✓ ${cleanName(name)}`:'';
-  loadContractsForCustomer(p.customerNo||'');
-  setTimeout(()=>{$('form-contract').value=p.contractId||'';},50);
-  $('form-amount').value=p.amount||'';$('form-due-date').value=toInputDate(p.dueDate);
-  $('form-payment-date').value=toInputDate(p.paymentDate);$('form-mode').value=p.paymentMode||'';
-  $('form-or-number').value=p.orNumber||'';$('form-received-by').value=p.receivedBy||'';
-  $('form-status').value=p.status||'Pending';
-  formNotes=Array.isArray(p.notes)?[...p.notes]:[];
-  if(!formNotes.length&&p.remarks&&typeof p.remarks==='string'&&p.remarks.trim())
-    formNotes.push({text:p.remarks.trim(),author:'System (migrated)',timestamp:p.createdAt||p.updatedAt||null});
-  renderNotesThread();
-  openModal('payment-form-modal');
-}
-
-// Open the Add Payment modal pre-filled from a synthesized (virtual) schedule row.
-// Saving creates a NEW payment record — the virtual row was never in Firestore.
-function openRecordModal(id){
-  const p=allPaymentRows.find(x=>x.id===id);if(!p)return;
-  clearForm();
-  $('form-modal-title').textContent='Record Payment';$('save-btn-text').textContent='Save Payment';
-  $('form-payment-id').value=''; // empty → save as new
-  $('form-customer-no').value=p.customerNo||'';
-  const name=clientMap[p.customerNo];$('customer-hint').textContent=name?`✓ ${cleanName(name)}`:'';
-  loadContractsForCustomer(p.customerNo||'');
-  setTimeout(()=>{$('form-contract').value=p.contractId||'';},50);
-  // Pre-fill with the redistributed amount (what's actually owed for this session)
-  $('form-amount').value=dispAmt(p)||'';
-  $('form-due-date').value=toInputDate(p.dueDate);
-  $('form-status').value='Pending';
-  formNotes=[];renderNotesThread();
-  openModal('payment-form-modal');
-}
-
-function clearForm(){
-  ['form-payment-id','form-customer-no','form-amount','form-due-date','form-payment-date','form-or-number','form-new-note'].forEach(id=>$(id).value='');
-  ['form-contract','form-mode','form-received-by'].forEach(id=>$(id).value='');
-  $('form-status').value='Pending';$('customer-hint').textContent='';
-  $('form-contract').innerHTML='<option value="">— Select Customer first —</option>';
-  formNotes=[];
-}
-
-$('btn-save-payment').addEventListener('click',async()=>{
-  const customerNo=$('form-customer-no').value.trim(),contractId=$('form-contract').value,amount=parseFloat($('form-amount').value)||0,dueDate=$('form-due-date').value,status=$('form-status').value;
-  if(!customerNo){showToast('Customer No is required.','error');return;}
-  if(!amount){showToast('Amount is required.','error');return;}
-  if(!dueDate){showToast('Due Date is required.','error');return;}
-  const btn=$('btn-save-payment');btn.disabled=true;$('save-btn-text').textContent='Saving…';
-  const parseLocalDate=(s)=>{if(!s)return null;const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
-  const pendingNote=$('form-new-note').value.trim();
-  if(pendingNote){formNotes.push({text:pendingNote,author:currentUser?.displayName||currentUser?.email||'Unknown',timestamp:new Date()});$('form-new-note').value='';}
-  const data={customerNo,contractId,amount,status,dueDate:parseLocalDate(dueDate),paymentDate:parseLocalDate($('form-payment-date').value),paymentMode:$('form-mode').value,orNumber:$('form-or-number').value.trim(),receivedBy:$('form-received-by').value,notes:formNotes,updatedAt:serverTimestamp()};
-  const editId=$('form-payment-id').value;
   try{
-    if(editId){
-      await smartUpdateDoc(doc(db,'payments',editId),data);
-      const idx=allPayments.findIndex(x=>x.id===editId);if(idx>=0)allPayments[idx]={...allPayments[idx],...data};
-      await logAction('updated','payment',editId,`Updated payment for ${customerNo} — ₱${amount.toLocaleString()} — ${status}`);
-      showToast('Payment updated.');
-    }else{
+    const data={contractId, status, proposalAmount, notes, updatedAt:serverTimestamp()};
+    if(renewalId){
+      await smartUpdateDoc(doc(db,'renewals',renewalId),data);
+      // Capture previous fields first, then merge — do NOT self-reference renewalMap[contractId].data()
+      const prevData = renewalMap[contractId] ? {...renewalMap[contractId].data()} : {};
+      const merged = {...prevData, ...data};
+      renewalMap[contractId]={id:renewalId, data:()=>merged};
+    } else {
+      const c=allContracts.find(x=>x.id===contractId);
+      data.customerNo=c?.customerNo||'';
       data.createdAt=serverTimestamp();
-      const ref=await smartAddDoc(collection(db,'payments'),data);allPayments.unshift({id:ref.id,...data});
-      await logAction('created','payment',ref.id,`Created payment for ${customerNo} — ₱${amount.toLocaleString()} — ${status}`);
-      showToast('Payment added.');
+      const ref=await smartAddDoc(collection(db,'renewals'),data);
+      const snapshot={...data};
+      renewalMap[contractId]={id:ref.id, data:()=>snapshot};
+      $('status-renewal-id').value=ref.id;
     }
-    closeModal('payment-form-modal');buildPaymentRows();applyFilters();
+    await logAction('updated','renewal',contractId,`Updated renewal status to "${status}" for contract ${contractId}`);
+    closeModal('status-modal');
+    showToast(`Renewal status updated to "${status}".`);
+    computeSummary(); applyFilters();
   }catch(err){showToast('Failed: '+err.message,'error');}
-  btn.disabled=false;$('save-btn-text').textContent=editId?'Update Payment':'Save Payment';
+  btn.disabled=false; $('status-btn-text').textContent='Save Status';
 });
 
+/* ── Renew Contract Modal ── */
+async function openRenewModal(contractId) {
+  const c=allContracts.find(x=>x.id===contractId); if(!c) return;
+  // Redirect to contracts page with pre-filled renewal data
+  window.location.href = buildRenewalUrl(c);
+}
+// (Legacy function kept for compatibility — actual renew modal no longer used)
+async function _openRenewModalLegacy(contractId) {
+  const c=allContracts.find(x=>x.id===contractId); if(!c) return;
+  const clientData=clientMap[c.customerNo];
+  const clientName=cleanName(clientData?.clientName||c.customerNo||'—');
+
+  $('renew-old-contract-id').value=contractId;
+  $('renew-modal-subtitle').textContent=`${clientName} · ${c.contractType||''}`;
+
+  // Fill old contract reference banner
+  const endDate=toLocalDate(c.contractEndDate);
+  const dl=daysLeft(c.contractEndDate);
+  $('ocb-grid').innerHTML=`
+    <div class="ocb-item"><label>Client</label><span>${clientName}</span></div>
+    <div class="ocb-item"><label>Customer No</label><span>${c.customerNo||'—'}</span></div>
+    <div class="ocb-item"><label>Contract Type</label><span>${c.contractType||'—'}</span></div>
+    <div class="ocb-item"><label>End Date</label><span style="color:${dl!==null&&dl<0?'var(--red-text)':'inherit'}">${fmtDate(c.contractEndDate)}${dl!==null?` (${dl<0?Math.abs(dl)+'d overdue':dl+'d left'})`:''}</span></div>
+    <div class="ocb-item"><label>Amount</label><span>${fmtCur(c.totalAmount)}</span></div>
+    <div class="ocb-item"><label>Frequency</label><span>${c.frequency||'—'}</span></div>`;
+
+  // Pre-fill form from old contract
+  $('renew-contract-type').value=c.contractType||'Termite Control';
+  $('renew-treatment-method').value=c.treatmentMethod||'';
+  $('renew-frequency').value=c.frequency||'monthly';
+  $('renew-sessions').value=c.noOfSessions||12;
+  $('renew-warranty').value=c.warrantyPeriod||0;
+  $('renew-amount').value=c.totalAmount||'';
+  $('renew-team').value=c.assignedTeam||'';
+  $('renew-agent').value=c.salesAgent||clientData?.salesAgent||'';
+  $('renew-notes').value='';
+
+  // New start date = day after old end date
+  if(endDate){
+    const nextDay=new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate()+1);
+    const iso=`${nextDay.getFullYear()}-${String(nextDay.getMonth()+1).padStart(2,'0')}-${String(nextDay.getDate()).padStart(2,'0')}`;
+    $('renew-start-date').value=iso;
+  } else {
+    $('renew-start-date').value='';
+  }
+
+  $('renew-schedule-preview').style.display='none';
+  updateRenewEndDate();
+  $('renew-btn-text').textContent='Create New Contract';
+  openModal('renew-modal');
+}
+
+/* ── Auto end-date in renew modal ── */
+function updateRenewEndDate(){
+  const startStr=$('renew-start-date').value;
+  const freq=$('renew-frequency').value;
+  const sessions=parseInt($('renew-sessions').value)||0;
+  if(!startStr||!freq||!sessions){$('renew-end-date').value='';$('renew-schedule-preview').style.display='none';return;}
+  const[y,m,d]=startStr.split('-').map(Number);
+  const startDate=new Date(y,m-1,d);
+  const endDate=computeEndDate(startDate,freq,sessions);
+  $('renew-end-date').value=`${endDate.getFullYear()}-${String(endDate.getMonth()+1).padStart(2,'0')}-${String(endDate.getDate()).padStart(2,'0')}`;
+  // Schedule preview
+  const interval=getIntervalMonths(freq);
+  const lines=[];
+  for(let i=0;i<Math.min(sessions,4);i++){
+    const td=freq==='one-time'?startDate:addMonths(startDate,interval*i);
+    lines.push(`Treatment ${i+1}: ${td.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'})}`);
+  }
+  if(sessions>4)lines.push(`… and ${sessions-4} more treatment${sessions-4===1?'':'s'}`);
+  $('renew-schedule-text').innerHTML=lines.join('<br>');
+  $('renew-schedule-preview').style.display='';
+}
+
+['renew-start-date','renew-frequency','renew-sessions'].forEach(id=>{$(id).addEventListener('change',updateRenewEndDate);$(id).addEventListener('input',updateRenewEndDate);});
+
+/* ── Confirm Renew ── */
+$('btn-confirm-renew').addEventListener('click', async()=>{
+  const oldContractId=$('renew-old-contract-id').value;
+  const oldContract=allContracts.find(x=>x.id===oldContractId); if(!oldContract) return;
+
+  const contractType=$('renew-contract-type').value;
+  const freq=$('renew-frequency').value;
+  const sessions=parseInt($('renew-sessions').value)||0;
+  const startStr=$('renew-start-date').value;
+  const amount=parseFloat($('renew-amount').value)||0;
+
+  if(!contractType){showToast('Contract type required.','error');return;}
+  if(!sessions){showToast('Sessions required.','error');return;}
+  if(!startStr){showToast('Start date required.','error');return;}
+  if(!amount){showToast('Amount required.','error');return;}
+
+  const btn=$('btn-confirm-renew'); btn.disabled=true; $('renew-btn-text').textContent='Creating…';
+
+  const [y,m,d]=startStr.split('-').map(Number);
+  const startDate=new Date(y,m-1,d);
+  const endDate=computeEndDate(startDate,freq,sessions);
+
+  try{
+    // 1. Get new contract number
+    const contractNo=await getNextContractNo();
+
+    // 2. Create new contract
+    const newContractData={
+      customerNo:       oldContract.customerNo,
+      contractNumber:   contractNo,
+      contractType,
+      treatmentMethod:  $('renew-treatment-method').value.trim(),
+      frequency:        freq,
+      noOfSessions:     sessions,
+      warrantyPeriod:   parseInt($('renew-warranty').value)||0,
+      contractStartDate:startDate,
+      contractEndDate:  endDate,
+      totalAmount:      amount,
+      assignedTeam:     $('renew-team').value,
+      salesAgent:       $('renew-agent').value,
+      communicationSource: oldContract.communicationSource||'',
+      status:           'active',
+      notes:            $('renew-notes').value.trim(),
+      renewedFromContractId: oldContractId,
+      createdAt:        serverTimestamp(),
+      updatedAt:        serverTimestamp()
+    };
+    const newContractRef=await smartAddDoc(collection(db,'contracts'),newContractData);
+
+    // 3. Generate treatment + payment schedules
+    const interval=getIntervalMonths(freq);
+    const batch=writeBatch(db);
+
+    for(let i=0;i<sessions;i++){
+      const tDate=freq==='one-time'?startDate:addMonths(startDate,interval*i);
+      batch.set(doc(collection(db,'treatments')),{
+        contractId:newContractRef.id, customerNo:oldContract.customerNo,
+        contractType, treatmentNo:`TRT-${String(i+1).padStart(3,'0')}`,
+        treatmentDate:tDate, status:'scheduled',
+        assignedTeam:$('renew-team').value||'',
+        chemicalsUsed:'', technician:'', notes:'', createdAt:serverTimestamp()
+      });
+      const pDate=freq==='one-time'?startDate:addMonths(startDate,interval*i);
+      batch.set(doc(collection(db,'payments')),{
+        contractId:newContractRef.id, customerNo:oldContract.customerNo,
+        amount:parseFloat((amount/sessions).toFixed(2)),
+        dueDate:pDate, paymentDate:null,
+        status:'Pending', paymentMode:'', orNumber:'', receivedBy:'', remarks:'',
+        createdAt:serverTimestamp()
+      });
+    }
+
+    // 4. Update old contract status to 'renewed'
+    batch.update(doc(db,'contracts',oldContractId),{status:'renewed',renewedToContractId:newContractRef.id,updatedAt:serverTimestamp()});
+
+    // 5. Upsert renewal record
+    const existingRenewal=renewalMap[oldContractId];
+    const renewalData={
+      contractId:     oldContractId,
+      newContractId:  newContractRef.id,
+      customerNo:     oldContract.customerNo,
+      status:         'renewed',
+      notes:          $('renew-notes').value.trim(),
+      updatedAt:      serverTimestamp()
+    };
+    if(existingRenewal){
+      batch.update(doc(db,'renewals',existingRenewal.id),renewalData);
+    } else {
+      renewalData.createdAt=serverTimestamp();
+      batch.set(doc(collection(db,'renewals')),renewalData);
+    }
+
+    await batch.commit();
+      await invalidateAfterWrite('clients', 'contracts', 'treatments', 'payments', 'complaints', 'inspections', 'renewals', 'teams', 'users', 'config');
+
+    await logAction('created','renewal',newContractRef.id,
+      `Renewed contract ${oldContract.contractNumber||oldContractId} → ${contractNo} for ${oldContract.customerNo}. ${sessions} treatments + ${sessions} payments generated.`);
+
+    // Update local state — remove old, add new contract
+    oldContract.status='renewed';
+    allContracts=allContracts.filter(x=>x.id!==oldContractId);
+    allContracts.push({
+      id:newContractRef.id, ...newContractData,
+      contractStartDate:startDate, contractEndDate:endDate
+    });
+
+    closeModal('renew-modal');
+    showToast(`Contract renewed! New contract ${contractNo} created with ${sessions} treatments & payments.`, 'success', 'Contract Renewed');
+    computeSummary(); applyFilters();
+  }catch(err){dismissLoadingScreen();console.error(err);showToast('Failed: '+err.message,'error');}
+  btn.disabled=false; $('renew-btn-text').textContent='Create New Contract';
+});
+
+/* ── Export CSV ── */
 $('btn-export-csv').addEventListener('click',()=>{
-  const headers=['customerNo','clientName','contractNo','dueDate','amount','originalAmount','orNumber','paymentDate','paymentMode','status','computedStatus','receivedBy','recentNote','rowType','contractId'];
-  const rows=filteredPayments.map(p=>{
-    const r=getRecentNote(p);
-    const contractNo=contractMap[p.contractId]?.contractNumber||'';
-    return[p.customerNo,cleanName(clientMap[p.customerNo]||''),contractNo,fmtDate(p.dueDate),dispAmt(p),Number(p.amount||0),p.orNumber||'',fmtDate(p.paymentDate),p.paymentMode||'',p.status,isOverdue(p)?'Overdue':p.status,p.receivedBy||'',r?r.text:'',p.__virtual?'scheduled':'recorded',p.contractId||''];
+  const headers=['customerNo','clientName','contractType','contractEndDate','daysLeft','totalAmount','salesAgent','renewalStatus','renewalNotes'];
+  const rows=filteredContracts.map(c=>{
+    const renewal=renewalMap[c.id];
+    const dl=daysLeft(c.contractEndDate);
+    return[
+      c.customerNo, cleanName(clientMap[c.customerNo]?.clientName||''),
+      c.contractType, fmtDate(c.contractEndDate),
+      dl!==null?dl:'',c.totalAmount,
+      c.salesAgent||clientMap[c.customerNo]?.salesAgent||'',
+      renewal?renewal.data().status:'pending',
+      renewal?renewal.data().notes||'':''
+    ];
   });
   const csv=[headers,...rows].map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:`pestastic_payments_${Date.now()}.csv`});a.click();showToast(`Exported ${filteredPayments.length} payment records.`);
+  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:`pestastic_renewals_${Date.now()}.csv`});
+  a.click(); showToast(`Exported ${filteredContracts.length} renewal records.`);
 });
 
-$('btn-dl-template').addEventListener('click',()=>{
-  const h='customerNo,contractId,amount,dueDate,paymentDate,paymentMode,orNumber,receivedBy,status,remarks';
-  const ex='PC-00001,,5000,2024-01-15,2024-01-20,gcash,OR-00001,Agent Name,Received,';
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([h+'\n'+ex],{type:'text/csv'})),download:'pestastic_payments_template.csv'});a.click();
-});
+/* ── Auth ── */
 
-$('btn-print').addEventListener('click',()=>{$('print-date').textContent=new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'});window.print();});
-
-$('btn-import-csv').addEventListener('click',()=>{csvRows=[];$('upload-preview').style.display='none';$('btn-confirm-import').disabled=true;$('csv-file-input').value='';openModal('csv-import-modal');});
-const csvZone=$('csv-upload-zone');
-csvZone.addEventListener('click',()=>$('csv-file-input').click());
-csvZone.addEventListener('dragover',e=>{e.preventDefault();csvZone.classList.add('drag');});
-csvZone.addEventListener('dragleave',()=>csvZone.classList.remove('drag'));
-csvZone.addEventListener('drop',e=>{e.preventDefault();csvZone.classList.remove('drag');handleCSV(e.dataTransfer.files[0]);});
-$('csv-file-input').addEventListener('change',e=>handleCSV(e.target.files[0]));
-
-function parseFlexDate(val){if(!val)return null;const s=String(val).trim();if(/^\d{5}$/.test(s)){const d=new Date(Date.UTC(1899,11,30));d.setUTCDate(d.getUTCDate()+parseInt(s));return new Date(d.getFullYear(),d.getMonth(),d.getDate());}if(/^\d{4}-\d{2}-\d{2}$/.test(s)){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){const[m,d,y]=s.split('/').map(Number);return new Date(y,m-1,d);}const months={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const m2=/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/i.exec(s);if(m2){const[,d,mon,y]=m2;return new Date(Number(y),months[mon.toLowerCase()],Number(d));}const d=new Date(s);return isNaN(d)?null:d;}
-
-function handleCSV(file){
-  if(!file||!file.name.endsWith('.csv')){showToast('Please upload a .csv file.','error');return;}
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const lines=e.target.result.split(/\r?\n/).filter(l=>l.trim());
-    const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim().toLowerCase());
-    csvRows=lines.slice(1).map(line=>{const vals=line.match(/(".*?"|[^,]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g)||[];const row={};headers.forEach((h,i)=>{row[h]=(vals[i]||'').replace(/^"|"$/g,'').trim();});return row;}).filter(r=>r.customerno||r.customerNo);
-    $('preview-filename').textContent=file.name;$('preview-count').textContent=`${csvRows.length} records`;
-    $('preview-table-wrap').innerHTML=`<table style="width:100%;border-collapse:collapse">${[headers.slice(0,5),...csvRows.slice(0,4).map(r=>headers.slice(0,5).map(h=>r[h]||''))].map((row,i)=>`<tr style="${i===0?'background:var(--bg-secondary);font-weight:700':''}"><td style="padding:4px 6px;border-bottom:1px solid var(--border)">${row.join('</td><td style="padding:4px 6px;border-bottom:1px solid var(--border)">')}</td></tr>`).join('')}</table>`;
-    $('upload-preview').style.display='';$('btn-confirm-import').disabled=csvRows.length===0;$('import-btn-text').textContent=`Import ${csvRows.length} Records`;
-  };
-  reader.readAsText(file);
-}
-
-$('btn-confirm-import').addEventListener('click',async()=>{
-  if(!csvRows.length)return;
-  $('btn-confirm-import').disabled=true;$('import-btn-text').textContent='Importing…';
-  const batch=writeBatch(db);let count=0;
-  for(const row of csvRows){
-    const g=k=>row[k.toLowerCase()]||row[k]||'';
-    const customerNo=g('customerNo')||g('customerno');if(!customerNo)continue;
-    const remarksVal=g('remarks');
-    const notesArr=remarksVal?[{text:remarksVal,author:currentUser?.displayName||currentUser?.email||'CSV Import',timestamp:new Date()}]:[];
-    const ref=doc(collection(db,'payments'));
-    batch.set(ref,{customerNo,contractId:g('contractId')||'',amount:parseFloat(g('amount'))||0,dueDate:parseFlexDate(g('dueDate'))||null,paymentDate:parseFlexDate(g('paymentDate'))||null,paymentMode:g('paymentMode')||'',orNumber:g('orNumber')||'',receivedBy:g('receivedBy')||'',status:g('status')||'Pending',notes:notesArr,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
-    count++;
-  }
-  await batch.commit();
-      await invalidateAfterWrite('clients', 'contracts', 'treatments', 'payments', 'complaints', 'inspections', 'renewals', 'teams', 'users', 'config');
-  await logAction('bulk_import','payment','batch',`Imported ${count} payment records via CSV`);
-  closeModal('csv-import-modal');showToast(`Successfully imported ${count} payment records.`);
-  await loadAll();$('import-btn-text').textContent='Import';
-});
-
+/* ── Sidebar & topbar notification badges ── */
 async function loadSidebarBadges() {
   /* Replaced by sidebar-badges live listener.
      Reads SUMMARY/DASHBOARD doc once with onSnapshot; was
@@ -1198,22 +1442,26 @@ async function loadSidebarBadges() {
     mountSidebarBadges({ currentRole: (typeof currentRole !== 'undefined' ? currentRole : null) });
   } catch (e) { console.warn('[badges]', e?.message || e); }
 }
-
-onAuthStateChanged(auth,async user=>{
+onAuthStateChanged(auth, async user=>{
   if(!user){dismissLoadingScreen();window.location.replace('login.html');return;}
   currentUser=user;
   try{
     const snap=await getDoc(doc(db,'users',user.uid));
-    if(!snap.exists()){await smartSetDoc(doc(db,'users',user.uid),{uid:user.uid,email:user.email,displayName:user.displayName||'',photoURL:user.photoURL||'',role:'user',status:'pending',createdAt:serverTimestamp(),lastLogin:serverTimestamp()});dismissLoadingScreen();$('auth-screen').style.display='flex';$('login-card').style.display='none';$('pending-card').style.display='block';return;}
+    if(!snap.exists()){
+      await smartSetDoc(doc(db,'users',user.uid),{uid:user.uid,email:user.email,displayName:user.displayName||'',photoURL:user.photoURL||'',role:'user',status:'pending',createdAt:serverTimestamp(),lastLogin:serverTimestamp()});
+      dismissLoadingScreen();$('auth-screen').style.display='flex';$('login-card').style.display='none';$('pending-card').style.display='block';return;
+    }
     const data=snap.data();
     updateLastLoginNoInvalidate(doc(db,'users',user.uid), {lastLogin: serverTimestamp()}).catch(()=>{});
     if(data.status!=='approved'){dismissLoadingScreen();$('auth-screen').style.display='flex';$('login-card').style.display='none';$('pending-card').style.display='block';return;}
     currentRole=data.role;
-    dismissLoadingScreen();$('auth-screen').style.display='none';$('app-shell').style.cssText='display:flex;height:100vh;overflow:hidden;width:100vw;';
+    dismissLoadingScreen();$('auth-screen').style.display='none'; $('app-shell').style.cssText='display:flex;height:100vh;overflow:hidden;width:100vw;';
     loadSidebarBadges();
     const name=user.displayName||user.email;
-    $('user-display-name').textContent=name;$('user-role-label').textContent=(data.role||'user').replace('_',' ');
-    if(user.photoURL)$('user-avatar').innerHTML=`<img src="${user.photoURL}" alt="${name}"/>`;else $('user-initials').textContent=name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+    $('user-display-name').textContent=name;
+    $('user-role-label').textContent=(data.role||'user').replace('_',' ');
+    if(user.photoURL)$('user-avatar').innerHTML=`<img src="${user.photoURL}" alt="${name}"/>`;
+    else $('user-initials').textContent=name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
     if(data.role==='admin'||data.role==='super_admin'){$('admin-nav-label').style.display='';$('nav-users').style.display='';}
     if(data.role==='super_admin')$('nav-settings').style.display='';
     await loadAll();

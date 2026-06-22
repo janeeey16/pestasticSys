@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pestastic — Renewals</title>
+  <title>Pestastic — Client Statement of Account</title>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -11,14 +11,13 @@
       --bg:#fff;--bg-secondary:#f8f9fa;--bg-tertiary:#f1f3f5;
       --sidebar-bg:#0f1b12;--sidebar-text:#c8d6ca;--sidebar-muted:#6b7f6e;
       --text:#111827;--text-secondary:#4b5563;--text-muted:#9ca3af;
-      --border:#e5e7eb;--border-hover:#d1d5db;
+      --border:#e5e7eb;
       --radius:8px;--radius-sm:4px;--radius-lg:12px;
       --shadow:0 2px 8px rgba(0,0,0,.10);--shadow-lg:0 8px 24px rgba(0,0,0,.12);
       --green:hsl(142,76%,36%);--green-bg:hsl(142,76%,95%);--green-text:hsl(142,76%,28%);
       --blue:hsl(213,94%,47%);--blue-bg:hsl(213,94%,95%);--blue-text:hsl(213,94%,35%);
       --amber:hsl(38,92%,50%);--amber-bg:hsl(38,92%,95%);--amber-text:hsl(38,92%,32%);
       --red:hsl(0,84%,50%);--red-bg:hsl(0,84%,96%);--red-text:hsl(0,84%,38%);
-      --purple:hsl(262,83%,58%);--purple-bg:hsl(262,83%,96%);--purple-text:hsl(262,83%,42%);
       --gray:hsl(220,9%,46%);--gray-bg:hsl(220,9%,95%);--gray-text:hsl(220,9%,35%);
       --sidebar-width:260px;--topbar-height:60px;
       --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif
@@ -26,7 +25,7 @@
     html,body{height:100%;font-family:var(--font);font-size:14px;color:var(--text);background:var(--bg-secondary);line-height:1.5;-webkit-font-smoothing:antialiased}
     a{color:inherit;text-decoration:none}
     button{font-family:var(--font);cursor:pointer}
-    input,select,textarea{font-family:var(--font);font-size:14px}
+    input,select{font-family:var(--font);font-size:14px}
 
     /* AUTH */
     #auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0f1b12 0%,#1a2e1d 50%,#0d1f0f 100%)}
@@ -61,11 +60,11 @@
     .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-sm);color:var(--sidebar-text);font-size:13.5px;font-weight:450;cursor:pointer;transition:all .15s;position:relative;user-select:none}
     .nav-item:hover{background:rgba(255,255,255,.07);color:white}
     .nav-item.active{background:rgba(34,197,94,.15);color:hsl(142,76%,65%)}
+    .nav-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center}
+    .nav-badge.amber{background:var(--amber)}
     .nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--primary);border-radius:0 2px 2px 0}
     .nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
     .nav-item.active svg{opacity:1}
-    .nav-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center}
-    .nav-badge.amber{background:var(--amber)}
     .sidebar-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,.06)}
     .sidebar-user{display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s}
     .sidebar-user:hover{background:rgba(255,255,255,.07)}
@@ -84,178 +83,191 @@
     .topbar{height:var(--topbar-height);background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
     .hamburger{display:none;background:none;border:none;padding:6px;border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer}
     .hamburger svg{width:20px;height:20px}
-    .topbar-title{font-size:16px;font-weight:700;color:var(--text)}
+    .topbar-title{font-size:16px;font-weight:700}
     .topbar-spacer{flex:1}
-    .topbar-btn{width:34px;height:34px;background:none;border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;position:relative}
+    .topbar-btn{width:34px;height:34px;background:none;border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer}
     .topbar-btn svg{width:16px;height:16px}
-    .page-content{flex:1;overflow:hidden;padding:24px;display:flex;flex-direction:column}
+    .page-content{flex:1;overflow-y:auto;padding:24px}
     .page-content::-webkit-scrollbar{width:6px}
     .page-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-    /* BUTTONS */
+    /* CONTROLS */
+    .controls-bar{display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;flex-wrap:wrap}
+    .controls-bar label{font-size:13px;font-weight:600;color:var(--text-secondary);white-space:nowrap}
+    .combobox-wrap{position:relative;flex:1;min-width:260px}
+    .combobox-input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13.5px;outline:none;transition:border-color .15s;font-family:var(--font)}
+    .combobox-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.10)}
+    .combobox-dropdown{position:absolute;top:calc(100%+4px);left:0;right:0;background:white;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);z-index:100;max-height:260px;overflow-y:auto;display:none}
+    .combobox-dropdown.open{display:block}
+    .combobox-item{padding:9px 14px;cursor:pointer;font-size:13.5px;transition:background .1s}
+    .combobox-item:hover{background:var(--primary-light)}
+    .combobox-item-main{font-weight:600;color:var(--text)}
+    .combobox-item-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+    .combobox-empty{padding:16px;text-align:center;color:var(--text-muted);font-size:13px}
+    .date-input{padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13.5px;outline:none;transition:border-color .15s;font-family:var(--font)}
+    .date-input:focus{border-color:var(--primary)}
+    .controls-spacer{flex:1}
     .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:var(--radius);font-size:13.5px;font-weight:500;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
     .btn svg{width:15px;height:15px}
     .btn-primary{background:var(--primary);color:white}
     .btn-primary:hover{background:var(--primary-hover)}
-    .btn-primary:active{transform:scale(.98)}
-    .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
-    .btn-secondary{background:white;color:var(--text);border:1px solid var(--border)}
-    .btn-secondary:hover{background:var(--bg-secondary)}
-    .btn-ghost{background:none;color:var(--text-secondary);border:none;padding:6px 10px}
-    .btn-ghost:hover{background:var(--bg-secondary);color:var(--text)}
-    .btn-sm{padding:5px 10px;font-size:12px}
-    .btn-sm svg{width:13px;height:13px}
-    .btn-amber{background:var(--amber-bg);color:var(--amber-text);border:1px solid #fcd34d}
-    .btn-amber:hover{background:#fef3c7}
 
-    /* BADGES */
-    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
-    .badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
-    .badge-green{background:var(--green-bg);color:var(--green-text)}
-    .badge-blue{background:var(--blue-bg);color:var(--blue-text)}
-    .badge-amber{background:var(--amber-bg);color:var(--amber-text)}
-    .badge-red{background:var(--red-bg);color:var(--red-text)}
-    .badge-purple{background:var(--purple-bg);color:var(--purple-text)}
-    .badge-gray{background:var(--gray-bg);color:var(--gray-text)}
-
-    /* PAGE */
-    .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap;flex-shrink:0}
-    .page-header-left h2{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
-    .page-header-left p{font-size:13px;color:var(--text-muted);margin-top:3px}
-    .page-header-right{display:flex;gap:8px;flex-wrap:wrap}
-
-    /* SUMMARY CARDS */
-    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;flex-shrink:0}
-    .sum-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;transition:box-shadow .15s,transform .15s;cursor:default}
-    .sum-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
-    .sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
-    .sum-card.total-exp::before{background:var(--blue)}
-    .sum-card.renewed-c::before{background:var(--green)}
-    .sum-card.pending-c::before{background:var(--amber)}
-    .sum-card.declined-c::before{background:var(--red)}
-    .sum-card-label{font-size:11.5px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
-    .sum-card-value{font-size:28px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.5px}
-    .sum-card-sub{font-size:12px;color:var(--text-muted);margin-top:6px}
-    .sum-card-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);opacity:.07}
-    .sum-card-icon svg{width:52px;height:52px}
-
-    /* DAYS FILTER TABS */
-    .days-filter{display:flex;align-items:center;gap:6px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:14px;width:fit-content;flex-shrink:0}
-    .days-btn{padding:6px 16px;border-radius:6px;font-size:13px;font-weight:500;border:none;cursor:pointer;color:var(--text-secondary);background:none;transition:all .15s;font-family:var(--font)}
-    .days-btn.active{background:var(--primary);color:white;font-weight:600}
-    .days-btn:hover:not(.active){background:var(--bg-secondary);color:var(--text)}
-
-    /* FILTERS */
-    .filters-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;flex-shrink:0}
-    .search-wrap{position:relative;flex:1;min-width:220px}
-    .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--text-muted);pointer-events:none}
-    .search-input{width:100%;padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:var(--radius);font-size:13.5px;background:white;outline:none;transition:border-color .15s,box-shadow .15s}
-    .search-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.10)}
-    .filter-select{padding:8px 32px 8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13.5px;background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") no-repeat right 8px center/16px;appearance:none;outline:none;cursor:pointer;color:var(--text)}
-    .filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.10)}
-
-    /* TABLE */
-    .table-card{background:white;border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;overflow:hidden}
-    .table-wrapper{overflow:auto;flex:1;min-height:0}
-    table{width:100%;border-collapse:collapse}
-    thead th{padding:10px 14px;background:var(--bg-secondary);border-bottom:1px solid var(--border);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-secondary);white-space:nowrap;text-align:left;position:sticky;top:0;z-index:1}
-    tbody tr{border-bottom:1px solid var(--bg-tertiary);transition:background .1s}
-    tbody tr:last-child{border-bottom:none}
-    tbody tr:hover{background:var(--bg-secondary)}
-    tbody td{padding:10px 14px;font-size:13.5px;color:var(--text);vertical-align:middle}
-    td.muted{color:var(--text-muted);font-size:12.5px}
-    td.mono{font-family:monospace;font-size:12.5px;color:var(--text-secondary)}
-    .actions-cell{display:flex;align-items:center;gap:5px;flex-wrap:nowrap}
-
-    /* DAYS LEFT PILL */
-    .days-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
-    .days-pill.critical{background:var(--red-bg);color:var(--red-text)}
-    .days-pill.warning{background:var(--amber-bg);color:var(--amber-text)}
-    .days-pill.ok{background:var(--green-bg);color:var(--green-text)}
-    .days-pill.overdue{background:var(--red-bg);color:var(--red-text)}
-
-    /* PAGINATION */
-    .pagination{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-top:1px solid var(--border);background:white;flex-wrap:wrap;gap:10px}
-    .pagination-info{font-size:13px;color:var(--text-muted)}
-    .pagination-controls{display:flex;align-items:center;gap:4px}
-    .page-btn{min-width:32px;height:32px;padding:0 10px;background:white;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:var(--font)}
-    .page-btn:hover:not(:disabled){background:var(--bg-secondary);color:var(--text)}
-    .page-btn.active{background:var(--primary);color:white;border-color:var(--primary);font-weight:600}
-    .page-btn:disabled{opacity:.4;cursor:not-allowed}
-
-    /* FORMS */
-    .form-group{margin-bottom:16px}
-    .form-label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
-    .form-label .req{color:var(--red);margin-left:2px}
-    .form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13.5px;color:var(--text);background:white;transition:border-color .15s,box-shadow .15s;outline:none}
-    .form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:16px;padding-right:32px;cursor:pointer}
-    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(34,197,94,.12)}
-    .form-input::placeholder,.form-textarea::placeholder{color:var(--text-muted)}
-    .form-textarea{resize:vertical;min-height:80px}
-    .form-hint{font-size:11.5px;color:var(--text-muted);margin-top:4px}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .form-row.three{grid-template-columns:1fr 1fr 1fr}
-    .form-input[readonly]{background:var(--bg-secondary);color:var(--text-secondary)}
-    .form-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
-    .form-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-    .form-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:12px}
-
-    /* MODAL */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
-    .modal-overlay.open{opacity:1;pointer-events:all}
-    .modal{background:white;border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);transform:translateY(10px) scale(.98);transition:transform .2s}
-    .modal-overlay.open .modal{transform:translateY(0) scale(1)}
-    .modal-lg{max-width:720px}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--border);flex-shrink:0}
-    .modal-title{font-size:16px;font-weight:700;color:var(--text)}
-    .modal-subtitle{font-size:12px;color:var(--text-muted);margin-top:2px}
-    .modal-close{width:30px;height:30px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:all .15s}
-    .modal-close:hover{background:var(--bg-secondary);color:var(--text)}
-    .modal-close svg{width:15px;height:15px}
-    .modal-body{padding:22px;overflow-y:auto;flex:1}
-    .modal-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid var(--border);flex-shrink:0}
-
-    /* CONTRACT PREVIEW IN RENEW MODAL */
-    .old-contract-banner{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:20px}
-    .old-contract-banner-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:10px}
-    .ocb-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px}
-    .ocb-item label{font-size:11px;color:var(--text-muted);display:block}
-    .ocb-item span{font-size:13px;font-weight:600;color:var(--text)}
-
-    /* SCHEDULE PREVIEW */
-    .schedule-preview{background:var(--green-bg);border:1px solid var(--primary-border);border-radius:var(--radius);padding:12px 16px;margin-top:12px}
-    .schedule-preview-title{font-size:12px;font-weight:700;color:var(--green-text);margin-bottom:6px}
-    .schedule-preview-text{font-size:12.5px;color:var(--green-text)}
-
-    /* EMPTY */
-    .empty-state{text-align:center;padding:52px 20px}
-    .empty-state svg{width:40px;height:40px;color:var(--text-muted);margin-bottom:14px;opacity:.5}
-    .empty-state h3{font-size:15px;font-weight:600;margin-bottom:6px}
-    .empty-state p{font-size:13px;color:var(--text-muted);max-width:360px;margin:0 auto}
-
-    /* SPINNER / TOAST */
+    /* SPINNER */
     .spinner{width:18px;height:18px;border:2.5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
     @keyframes spin{to{transform:rotate(360deg)}}
-    #toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
-    .toast{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;min-width:280px;max-width:380px;box-shadow:var(--shadow-lg);display:flex;align-items:flex-start;gap:10px;pointer-events:all;animation:toastIn .2s ease;border-left:4px solid var(--primary)}
-    .toast.error{border-left-color:var(--red)}.toast.warning{border-left-color:var(--amber)}
-    .toast-icon svg{width:16px;height:16px}
-    .toast-body{flex:1}
-    .toast-title{font-size:13.5px;font-weight:600}
-    .toast-msg{font-size:12.5px;color:var(--text-secondary);margin-top:2px}
-    .toast-close{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0}
-    .toast-close svg{width:14px;height:14px}
-    @keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+    /* ══ REPORT STYLES ══ */
+    #report-area{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:40px 44px}
+
+    /* LETTERHEAD */
+    .letterhead{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #111;padding-bottom:16px;margin-bottom:24px;gap:20px}
+    .lh-logo{display:flex;align-items:center;gap:14px}
+    .lh-logo-icon{width:52px;height:52px;background:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .lh-logo-icon svg{width:28px;height:28px;color:white}
+    .lh-company h1{font-size:20px;font-weight:900;color:#111;letter-spacing:-.3px}
+    .lh-company p{font-size:12px;color:#555;margin-top:2px}
+    .lh-right{text-align:right}
+    .lh-doc-title{font-size:18px;font-weight:900;color:#111;text-transform:uppercase;letter-spacing:.04em}
+    .lh-doc-sub{font-size:13px;color:#444;margin-top:5px;font-weight:600}
+    .lh-doc-meta{font-size:11.5px;color:#777;margin-top:2px}
+
+    /* CLIENT HEADER */
+    .client-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:20px;padding:14px 18px;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:6px}
+    .client-header-left h2{font-size:16px;font-weight:900;color:#111;margin-bottom:4px}
+    .client-header-left p{font-size:12.5px;color:#555;line-height:1.6}
+    .client-header-right{text-align:right;flex-shrink:0}
+    .client-header-right .customer-no{font-size:13px;font-weight:800;color:#111;margin-bottom:4px}
+    .client-header-right p{font-size:12px;color:#6b7280}
+
+    /* DATE RANGE BADGE */
+    .date-range-badge{display:inline-block;background:#111;color:white;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:16px}
+
+    /* CONTRACTS LIST */
+    .contracts-section{margin-bottom:20px}
+    .section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#374151;border-bottom:2px solid #e5e7eb;padding-bottom:6px;margin-bottom:10px}
+    .contract-card{border:1px solid #e5e7eb;border-radius:6px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .contract-card:last-child{margin-bottom:0}
+    .cc-left{flex:1}
+    .cc-no{font-size:11.5px;font-family:monospace;color:#6b7280;margin-bottom:2px}
+    .cc-type{font-size:13px;font-weight:700;color:#111}
+    .cc-period{font-size:12px;color:#6b7280;margin-top:2px}
+    .cc-right{text-align:right;flex-shrink:0}
+    .cc-amount{font-size:15px;font-weight:900;color:#111}
+    .cc-status{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px}
+    .cc-status.active{background:#dcfce7;color:#15803d}
+    .cc-status.expired{background:#fee2e2;color:#dc2626}
+    .cc-status.renewed{background:#dbeafe;color:#1d4ed8}
+    .cc-status.other{background:#f3f4f6;color:#6b7280}
+
+    /* SOA TABLE */
+    .soa-table{width:100%;border-collapse:collapse;margin-bottom:0;font-size:12.5px}
+    .soa-table th{padding:8px 10px;background:#1f2937;color:white;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-align:left;border:1px solid #374151}
+    .soa-table th.right{text-align:right}
+    .soa-table td{padding:8px 10px;border:1px solid #e5e7eb;vertical-align:middle}
+    .soa-table td.right{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+    .soa-table td.num{text-align:center;color:#9ca3af;font-size:11.5px;width:32px}
+    .soa-table td.mono{font-family:monospace;font-size:11.5px;color:#6b7280}
+    .soa-table td.nowrap{white-space:nowrap}
+    .soa-table td.balance-positive{color:#15803d;font-weight:700}
+    .soa-table td.balance-negative{color:#dc2626;font-weight:700}
+    .soa-table tbody tr:nth-child(even){background:#fafafa}
+    .soa-table tfoot td{padding:10px;font-weight:700;font-size:13px;border:1px solid #d1d5db;background:#f1f3f5}
+    .soa-table tfoot td.right{text-align:right;font-variant-numeric:tabular-nums}
+    .row-credit{background:#f0fdf4!important}
+    .row-debit{background:#fff!important}
+
+    /* TYPE TAG */
+    .type-tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:700}
+    .type-tag.debit{background:#fee2e2;color:#dc2626}
+    .type-tag.credit{background:#dcfce7;color:#15803d}
+
+    /* SUMMARY BOX */
+    .summary-box{display:flex;gap:0;border:2px solid #111;border-radius:8px;overflow:hidden;margin-top:20px}
+    .sum-col{flex:1;text-align:center;padding:16px 12px;border-right:1px solid #d1d5db}
+    .sum-col:last-child{border-right:none}
+    .sum-col-val{font-size:19px;font-weight:900;color:#111;margin-bottom:4px}
+    .sum-col-val.green{color:#15803d}
+    .sum-col-val.red{color:#dc2626}
+    .sum-col-val.neutral{color:#1d4ed8}
+    .sum-col-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#6b7280}
+
+    /* FOOTER */
+    .report-footer{margin-top:24px;padding-top:14px;border-top:1px solid #e5e7eb;font-size:11px;color:#9ca3af;display:flex;justify-content:space-between;align-items:center}
+    .sysgen-note{text-align:center;margin-top:14px;font-size:11px;color:#6b7280;font-style:italic;border-top:1px dashed #e5e7eb;padding-top:10px}
+
+    /* PLACEHOLDER */
+    .report-placeholder{text-align:center;padding:56px 20px;color:var(--text-muted)}
+    .report-placeholder svg{width:44px;height:44px;margin-bottom:14px;opacity:.4}
+    .report-placeholder h3{font-size:15px;font-weight:600;color:var(--text-secondary);margin-bottom:6px}
+    .report-placeholder p{font-size:13px;max-width:360px;margin:0 auto}
 
     /* RESPONSIVE */
-    @media(max-width:900px){.summary-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:1024px){
       .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
       .sidebar-overlay.open{display:block}.main-wrapper{margin-left:0}.hamburger{display:flex}
-      .form-row,.form-row.three{grid-template-columns:1fr}.ocb-grid{grid-template-columns:1fr}
     }
-    @media(max-width:768px){.page-content{padding:16px}.filters-bar{flex-direction:column;align-items:stretch}.summary-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:480px){.summary-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){.page-content{padding:16px}.controls-bar{flex-direction:column;align-items:stretch}.client-header{flex-direction:column}}
+
+    /* PRINT */
+    @media print{
+      @page{margin:12mm 10mm;size:A4}
+
+      /* ── Hide all shell chrome ── */
+      .sidebar,.sidebar-overlay,.topbar,.hamburger,
+      .controls-bar,.summary-row,.summary-pills,.summary-grid,
+      .filters-bar,.page-header,
+      #toast-container,.btn-print,.btn-secondary,.btn-ghost,
+      .page-content > *:not(#report-area){display:none!important}
+
+      /* ── Reset ALL height/overflow that clips multi-page content ── */
+      *{box-sizing:border-box!important}
+      html,body{
+        display:block!important;
+        width:100%!important;max-width:100%!important;
+        height:auto!important;min-height:0!important;
+        overflow:visible!important;
+        background:white!important;
+        margin:0!important;padding:0!important;
+      }
+      #app-shell{
+        display:block!important;
+        width:100%!important;max-width:100%!important;
+        height:auto!important;min-height:0!important;
+        overflow:visible!important;
+        flex:none!important;
+      }
+      .main-wrapper{
+        display:block!important;
+        margin-left:0!important;
+        width:100%!important;max-width:100%!important;
+        height:auto!important;min-height:0!important;
+        overflow:visible!important;
+        flex:none!important;
+      }
+      .page-content{
+        display:block!important;
+        width:100%!important;max-width:100%!important;
+        height:auto!important;min-height:0!important;
+        overflow:visible!important;
+        padding:0!important;
+        flex:none!important;
+      }
+      #report-area{
+        display:block!important;
+        width:100%!important;max-width:100%!important;
+        height:auto!important;min-height:0!important;
+        overflow:visible!important;
+        border:none!important;border-radius:0!important;
+        padding:0!important;box-shadow:none!important;
+      }
+
+      /* ── Tables fill full width ── */
+      table{width:100%!important;table-layout:auto!important}
+
+            .contracts-section,.soa-section{{page-break-inside:avoid}}
+      .soa-table th{{background:#1f2937!important;color:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+      .soa-table tbody tr:nth-child(even),.row-credit,.soa-table tfoot td,.summary-box{{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+    }
   
     /* ── PAGE LOAD SCREEN ── */
     #loading-screen{position:fixed;inset:0;background:#0f1b12;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .25s}
@@ -264,40 +276,6 @@
     .ls-logo svg{width:34px;height:34px;color:white}
     .ls-spinner{width:28px;height:28px;border:3px solid rgba(255,255,255,.15);border-top-color:hsl(142,76%,60%);border-radius:50%;animation:spin .7s linear infinite}
     .ls-text{font-size:13px;color:rgba(255,255,255,.45);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:.02em}
-
-    /* ── Sort icon ── */
-    .sort-icon { font-size:10px; margin-left:3px; color:var(--primary); }
-
-    /* ── Column header (Google Sheets style) ── */
-    .col-header { position:relative; cursor:pointer; user-select:none; white-space:nowrap; }
-    .col-header:hover { background:var(--bg-tertiary); }
-    .col-header-inner { display:flex; align-items:center; gap:4px; }
-    .col-menu-btn { background:none; border:none; color:var(--text-muted); font-size:10px; padding:2px 3px; cursor:pointer; border-radius:2px; line-height:1; opacity:0; transition:opacity .15s; }
-    .col-header:hover .col-menu-btn { opacity:1; }
-    .col-menu-btn:hover { background:var(--border); color:var(--text); }
-
-    /* ── Column dropdown ── */
-    .col-dropdown { position:absolute; top:100%; left:0; z-index:100; background:white; border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-lg); min-width:200px; padding:6px 0; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; }
-    .col-dropdown-item { display:flex; align-items:center; gap:8px; padding:7px 14px; cursor:pointer; color:var(--text); transition:background .1s; white-space:nowrap; }
-    .col-dropdown-item:hover { background:var(--bg-secondary); }
-    .col-dropdown-item svg { width:14px; height:14px; color:var(--text-muted); flex-shrink:0; }
-    .col-dropdown-sep { height:1px; background:var(--border); margin:4px 0; }
-    .col-dropdown-search { padding:6px 10px; }
-    .col-dropdown-search input { width:100%; padding:6px 10px; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:12.5px; outline:none; }
-    .col-dropdown-search input:focus { border-color:var(--primary); box-shadow:0 0 0 2px rgba(34,197,94,.12); }
-    .col-dropdown-values { max-height:180px; overflow-y:auto; }
-    .col-dropdown-values label { display:flex; align-items:center; gap:8px; padding:5px 14px; cursor:pointer; font-size:12.5px; color:var(--text); }
-    .col-dropdown-values label:hover { background:var(--bg-secondary); }
-    .col-dropdown-values input[type="checkbox"] { accent-color:var(--primary); }
-    .col-dropdown-actions { display:flex; gap:6px; padding:6px 10px; border-top:1px solid var(--border); margin-top:4px; }
-    .col-dropdown-actions button { flex:1; padding:5px 8px; font-size:12px; border-radius:var(--radius-sm); cursor:pointer; }
-
-    /* ── Scrollbars inside table ── */
-    .table-wrapper::-webkit-scrollbar { width:8px; height:8px; }
-    .table-wrapper::-webkit-scrollbar-thumb { background:var(--border-hover); border-radius:4px; }
-    .table-wrapper::-webkit-scrollbar-track { background:var(--bg-secondary); }
-    .table-wrapper::-webkit-scrollbar-corner { background:var(--bg-secondary); }
-    thead th { position:sticky; top:0; z-index:10; background:var(--bg-secondary); }
   </style>
 </head>
 <body>
@@ -340,29 +318,29 @@
     <nav class="sidebar-nav">
       <div class="nav-section-label">Main</div>
       <a class="nav-item" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
-      <a class="nav-item" href="clients.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients</a>
+      <a class="nav-item" href="clients.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
       <a class="nav-item" href="contracts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Contracts</a>
       <a class="nav-item" href="treatments.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Treatments</a>
       <div class="nav-section-label">Financial</div>
       <a class="nav-item" href="payments.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payments</a>
-      <a class="nav-item active" href="renewals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Renewals</a>
+      <a class="nav-item" href="renewals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Renewals</a>
       <div class="nav-section-label">Service</div>
       <a class="nav-item" href="complaints.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Complaints<span class="nav-badge" id="badge-complaints" style="display:none"></span></a>
       <a class="nav-item" href="inspections.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Inspections<span class="nav-badge amber" id="badge-inspections" style="display:none"></span></a>
       <div class="nav-section-label">Monitoring</div>
       <a class="nav-item" href="overdue.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Overdue<span class="nav-badge" id="badge-overdue" style="display:none"></span></a>
-      <a class="nav-item" href="notification-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications<span class="nav-badge" id="badge-notifications" style="display:none"></span></a>
-            <div class="nav-section-label">Reports</div>
+      <a class="nav-item" href="notification-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications<span class="nav-badge" id="notif-count-badge" style="display:none"></span></a>
+      <div class="nav-section-label">Reports</div>
       <a class="nav-item" href="report-daily-schedule.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Daily Schedule</a>
       <a class="nav-item" href="report-service.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Service Report</a>
-      <a class="nav-item" href="report-client-soa.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/></svg>Client SOA</a>
+      <a class="nav-item active" href="report-client-soa.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Client SOA</a>
       <a class="nav-item" href="report-monthly-collection.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Monthly Collection</a>
       <a class="nav-item" href="report-overdue-treatments.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Overdue Report</a>
-<div class="nav-section-label">Operations</div>
-      <a class="nav-item" href="teams.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Teams</a>
+      <div class="nav-section-label">Operations</div>
+      <a class="nav-item" href="teams.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Teams</a>
       <a class="nav-item" href="audit-log.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Audit Log</a>
       <div class="nav-section-label" id="admin-nav-label" style="display:none">Admin</div>
-      <a class="nav-item" href="user-management.html" id="nav-users" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User Management<span class="nav-badge amber" id="badge-pending-users" style="display:none"></span></a>
+      <a class="nav-item" href="user-management.html" id="nav-users" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User Management</a>
       <a class="nav-item" href="settings.html" id="nav-settings" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
     </nav>
     <div class="sidebar-footer">
@@ -377,271 +355,62 @@
   <div class="main-wrapper">
     <header class="topbar">
       <button class="hamburger" id="hamburger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-      <span class="topbar-title">Renewals</span>
+      <span class="topbar-title">Client Statement of Account</span>
       <div class="topbar-spacer"></div>
       <span id="last-updated" class="last-updated-badge" data-pc-topbar="1" style="font-size:12px;color:#9ca3af;margin-right:8px;white-space:nowrap"></span><button id="btn-refresh" class="topbar-btn" title="Refresh data" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></button><button class="topbar-btn" onclick="location.href='notification-calendar.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="topbar-notif-dot" id="notif-dot" style="display:none"></span></button>
     </header>
 
     <main class="page-content">
-      <div class="page-header">
-        <div class="page-header-left">
-          <h2>Renewals</h2>
-          <p>Monitor expiring contracts and manage renewal workflows</p>
+
+      <!-- Controls -->
+      <div class="controls-bar">
+        <label>Client</label>
+        <div class="combobox-wrap" id="cb-wrap">
+          <input type="text" class="combobox-input" id="client-search" placeholder="Search by name or customer number…" autocomplete="off" />
+          <div class="combobox-dropdown" id="client-dropdown"></div>
         </div>
-        <div class="page-header-right">
-          <button class="btn btn-secondary" id="btn-export-csv">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export CSV
-          </button>
+        <label>From</label>
+        <input type="date" class="date-input" id="date-from" />
+        <label>To</label>
+        <input type="date" class="date-input" id="date-to" />
+        <div class="controls-spacer"></div>
+        <button class="btn btn-primary btn-print" id="btn-print" onclick="window.print()" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print SOA
+        </button>
+      </div>
+
+      <!-- Report -->
+      <div id="report-area">
+        <div class="report-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <h3>Select a Client</h3>
+          <p>Search and select a client above to generate their Statement of Account.</p>
         </div>
       </div>
 
-      <!-- Summary cards -->
-      <div class="summary-grid">
-        <div class="sum-card total-exp">
-          <div class="sum-card-label">Total Expiring</div>
-          <div class="sum-card-value" id="sc-total">—</div>
-          <div class="sum-card-sub" id="sc-total-sub">Within window</div>
-          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        </div>
-        <div class="sum-card renewed-c">
-          <div class="sum-card-label">Renewed</div>
-          <div class="sum-card-value" id="sc-renewed" style="color:var(--green)">—</div>
-          <div class="sum-card-sub">Successfully renewed</div>
-          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
-        </div>
-        <div class="sum-card pending-c">
-          <div class="sum-card-label">Pending</div>
-          <div class="sum-card-value" id="sc-pending" style="color:var(--amber)">—</div>
-          <div class="sum-card-sub">Awaiting action</div>
-          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        </div>
-        <div class="sum-card declined-c">
-          <div class="sum-card-label">Declined</div>
-          <div class="sum-card-value" id="sc-declined" style="color:var(--red)">—</div>
-          <div class="sum-card-sub">Not renewing</div>
-          <div class="sum-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-        </div>
-      </div>
-
-      <!-- Days filter tabs -->
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap">
-        <div class="days-filter" id="days-filter">
-          <button class="days-btn" data-days="30">30 days</button>
-          <button class="days-btn active" data-days="90">90 days</button>
-          <button class="days-btn" data-days="60">60 days</button>
-          <button class="days-btn" data-days="120">120 days</button>
-        </div>
-        <span style="font-size:13px;color:var(--text-muted)" id="window-label">Showing contracts expiring within 90 days</span>
-      </div>
-
-      <!-- Filters -->
-      <div class="filters-bar">
-        <div class="search-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="search-input" id="search-input" placeholder="Search customer #, client name…" />
-        </div>
-        <button class="btn btn-ghost btn-sm" id="btn-clear-filters">Clear</button>
-      </div>
-
-      <!-- Table -->
-      <div class="table-card" style="flex:1;min-height:0">
-        <div class="table-wrapper" style="flex:1;overflow:auto;min-height:0">
-          <table>
-            <thead>
-              <tr>
-                <th class="col-header" data-sort="customerNo" data-col="customerNo"><div class="col-header-inner"><span>Customer No</span><span class="sort-icon" id="sort-customerNo"></span><button class="col-menu-btn" data-col="customerNo">▾</button></div></th>
-                <th class="col-header" data-sort="clientName" data-col="clientName"><div class="col-header-inner"><span>Client Name</span><span class="sort-icon" id="sort-clientName"></span><button class="col-menu-btn" data-col="clientName">▾</button></div></th>
-                <th class="col-header" data-sort="contractType" data-col="contractType"><div class="col-header-inner"><span>Contract Type</span><span class="sort-icon" id="sort-contractType"></span><button class="col-menu-btn" data-col="contractType">▾</button></div></th>
-                <th class="col-header" data-sort="contractEndDate" data-col="contractEndDate"><div class="col-header-inner"><span>End Date</span><span class="sort-icon" id="sort-contractEndDate"></span><button class="col-menu-btn" data-col="contractEndDate">▾</button></div></th>
-                <th class="col-header" data-sort="daysLeft" data-col="daysLeft"><div class="col-header-inner"><span>Days Left</span><span class="sort-icon" id="sort-daysLeft">▲</span><button class="col-menu-btn" data-col="daysLeft">▾</button></div></th>
-                <th class="col-header" data-sort="totalAmount" data-col="totalAmount"><div class="col-header-inner"><span>Amount (₱)</span><span class="sort-icon" id="sort-totalAmount"></span><button class="col-menu-btn" data-col="totalAmount">▾</button></div></th>
-                <th class="col-header" data-sort="salesAgent" data-col="salesAgent"><div class="col-header-inner"><span>Agent</span><span class="sort-icon" id="sort-salesAgent"></span><button class="col-menu-btn" data-col="salesAgent">▾</button></div></th>
-                <th class="col-header" data-sort="renewalStatus" data-col="renewalStatus"><div class="col-header-inner"><span>Renewal Status</span><span class="sort-icon" id="sort-renewalStatus"></span><button class="col-menu-btn" data-col="renewalStatus">▾</button></div></th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="renewals-tbody">
-              <tr><td colspan="9" style="text-align:center;padding:48px"><div class="spinner" style="margin:0 auto"></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <span class="pagination-info" id="pagination-info">Loading…</span>
-          <div class="pagination-controls" id="pagination-controls"></div>
-        </div>
-      </div>
     </main>
   </div>
 </div>
 
-<!-- ════════════════════════
-     UPDATE STATUS MODAL
-════════════════════════ -->
-<div class="modal-overlay" id="status-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title">Update Renewal Status</div>
-        <div class="modal-subtitle" id="status-modal-subtitle"></div>
-      </div>
-      <button class="modal-close" data-close="status-modal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="status-contract-id" />
-      <input type="hidden" id="status-renewal-id" />
-      <div class="form-group">
-        <label class="form-label">Renewal Status <span class="req">*</span></label>
-        <select class="form-select" id="status-select">
-          <option value="pending">Pending</option>
-          <option value="proposal-sent">Proposal Sent</option>
-          <option value="awaiting-response">Awaiting Response</option>
-          <option value="renewed">Renewed</option>
-          <option value="declined">Declined</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Proposal Amount (₱)</label>
-        <input type="number" class="form-input" id="status-proposal-amount" min="0" step="0.01" placeholder="Optional" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Notes</label>
-        <textarea class="form-textarea" id="status-notes" placeholder="Add context or follow-up notes…"></textarea>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-close="status-modal">Cancel</button>
-      <button class="btn btn-primary" id="btn-save-status">
-        <span id="status-btn-text">Save Status</span>
-      </button>
-    </div>
-  </div>
-</div>
+<script type="module">
 
-<!-- ════════════════════════
-     RENEW CONTRACT MODAL
-════════════════════════ -->
-<div class="modal-overlay" id="renew-modal">
-  <div class="modal modal-lg">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title">Renew Contract</div>
-        <div class="modal-subtitle" id="renew-modal-subtitle"></div>
-      </div>
-      <button class="modal-close" data-close="renew-modal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="renew-old-contract-id" />
-
-      <!-- Old contract reference -->
-      <div class="old-contract-banner">
-        <div class="old-contract-banner-title">Expiring Contract Reference</div>
-        <div class="ocb-grid" id="ocb-grid"></div>
-      </div>
-
-      <div class="form-section">
-        <div class="form-section-title">New Contract Details</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Contract Type <span class="req">*</span></label>
-            <select class="form-select" id="renew-contract-type">
-
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Treatment Method</label>
-            <input type="text" class="form-input" id="renew-treatment-method" placeholder="e.g. Chemical spraying" />
-          </div>
-        </div>
-        <div class="form-row three">
-          <div class="form-group">
-            <label class="form-label">Frequency <span class="req">*</span></label>
-            <select class="form-select" id="renew-frequency">
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">No. of Sessions <span class="req">*</span></label>
-            <input type="number" class="form-input" id="renew-sessions" min="1" placeholder="e.g. 12" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Warranty Period (mo.)</label>
-            <input type="number" class="form-input" id="renew-warranty" min="0" placeholder="e.g. 6" />
-          </div>
-        </div>
-        <div class="form-row three">
-          <div class="form-group">
-            <label class="form-label">New Start Date <span class="req">*</span></label>
-            <input type="date" class="form-input" id="renew-start-date" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">New End Date</label>
-            <input type="date" class="form-input" id="renew-end-date" readonly />
-            <div class="form-hint">Auto-calculated</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Total Amount (₱) <span class="req">*</span></label>
-            <input type="number" class="form-input" id="renew-amount" min="0" step="0.01" placeholder="0.00" />
-          </div>
-        </div>
-      </div>
-
-      <div class="form-section">
-        <div class="form-section-title">Assignment</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Assigned Team</label>
-            <select class="form-select" id="renew-team"><option value="">— Select Team —</option></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Sales Agent</label>
-            <select class="form-select" id="renew-agent"><option value="">— Select Agent —</option></select>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Notes</label>
-        <textarea class="form-textarea" id="renew-notes" placeholder="Any additional notes for the new contract…"></textarea>
-      </div>
-
-      <div id="renew-schedule-preview" style="display:none" class="schedule-preview">
-        <div class="schedule-preview-title">📅 New Schedule Preview</div>
-        <div id="renew-schedule-text" class="schedule-preview-text"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-close="renew-modal">Cancel</button>
-      <button class="btn btn-primary" id="btn-confirm-renew">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        <span id="renew-btn-text">Create New Contract</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div id="toast-container"></div>
-
-<!-- ════════════════════════════════════
-     FIREBASE + APP LOGIC
-════════════════════════════════════ -->
-<script>
 function dismissLoadingScreen(){
   const ls=document.getElementById('loading-screen');
   if(!ls)return;
   ls.classList.add('fade-out');
   setTimeout(()=>{if(ls.parentNode)ls.parentNode.removeChild(ls);},280);
 }
-// Failsafe: force-dismiss loading screen after 6 seconds
-setTimeout(function(){ dismissLoadingScreen(); }, 6000);
-</script>
-<script type="module">
+// Failsafe: force-dismiss after 6 seconds no matter what
+setTimeout(()=>dismissLoadingScreen(), 6000);
+
 import { initializeApp }   from './js/db.js';
 import { firebaseConfig } from './js/db.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from './js/db.js';
 import {
-  getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc,
-  updateDoc, query, where, orderBy, serverTimestamp, writeBatch, runTransaction
+  getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc,
+  query, where, orderBy, serverTimestamp
 } from './js/db.js';
 import { app as _pcApp, auth as _pcAuth, db as _pcDb } from './js/db.js';
 import {
@@ -651,789 +420,414 @@ import {
 import { mountSidebarBadges } from './js/sidebarBadges.js';
 import { mountLastUpdated, wireRefreshButton } from './js/pageInit.js';
 
+
 /* Backend now centralized in js/db.js (native Supabase) */
 const app = _pcApp; const auth = _pcAuth; const db = _pcDb;
 
-/* ── State ── */
 let currentUser = null, currentRole = null;
-let allContracts = [], renewalMap = {}, clientMap = {}, teamsData = [], salesAgents = [];
-let filteredContracts = [], currentPage = 1;
-const PER_PAGE = 20;
-let daysWindow = 90;
+let allClients = [], companySettings = {};
+let selectedCustomerNo = null;
 
-/* ── Helpers ── */
 const $ = id => document.getElementById(id);
 
-function showToast(msg, type='success', title='') {
-  const c=$('toast-container'), el=document.createElement('div');
-  el.className=`toast ${type==='success'?'':type}`;
-  const icons={success:`<svg viewBox="0 0 24 24" fill="none" stroke="hsl(142,76%,36%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,error:`<svg viewBox="0 0 24 24" fill="none" stroke="hsl(0,84%,50%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,warning:`<svg viewBox="0 0 24 24" fill="none" stroke="hsl(38,92%,50%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>`};
-  el.innerHTML=`<div class="toast-icon">${icons[type]||icons.success}</div><div class="toast-body"><div class="toast-title">${title||(type==='error'?'Error':type==='warning'?'Warning':'Done')}</div><div class="toast-msg">${msg}</div></div><button class="toast-close" onclick="this.parentElement.remove()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
-  c.appendChild(el); setTimeout(()=>el.remove(),5000);
-}
-
-function openModal(id)  { $(id).classList.add('open'); }
-function closeModal(id) { $(id).classList.remove('open'); }
-document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
-document.querySelectorAll('.modal-overlay').forEach(ov=>ov.addEventListener('click',e=>{if(e.target===ov)closeModal(ov.id);}));
-
-/* ── KEY FIX: All date comparisons use LOCAL midnight, not UTC ── */
-function todayLocal() {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-}
-
 function toLocalDate(v) {
-  if (!v) return null;
-  if (v.toDate) {
-    const d = v.toDate();
-    // Return a LOCAL date with time zeroed
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  }
-  if (v instanceof Date) return new Date(v.getFullYear(), v.getMonth(), v.getDate());
-  // Handle string
-  const s = String(v).trim();
-  // YYYY-MM-DD
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
-    const [y,m,d] = s.split('-').map(Number);
-    return new Date(y, m-1, d);
-  }
-  const d = new Date(v);
-  if (isNaN(d)) return null;
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  if(!v) return null;
+  if(v.toDate) { const d=v.toDate(); return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+  if(v instanceof Date) return new Date(v.getFullYear(),v.getMonth(),v.getDate());
+  const d=new Date(v); return isNaN(d)?null:new Date(d.getFullYear(),d.getMonth(),d.getDate());
 }
-
-function daysLeft(endDate) {
-  const today = todayLocal();
-  const end = toLocalDate(endDate);
-  if (!end) return null;
-  return Math.round((end - today) / (1000 * 60 * 60 * 24));
-}
-
-function fmtDate(v) {
-  if(!v) return '—';
-  const d = toLocalDate(v);
-  if(!d) return '—';
-  return d.toLocaleDateString('en-PH', {year:'numeric', month:'short', day:'numeric'});
-}
-
-function fmtCur(n) {
-  return '₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-
+function fmtDate(v) { if(!v)return '—'; const d=toLocalDate(v); if(!d)return '—'; return d.toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'}); }
+function fmtCur(n) { return '₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function cleanName(n){return(n||'').replace(/\s*\(.*?\)\s*/g,'').trim()||'—';}
 
-function daysPill(days) {
-  if (days === null) return '<span class="days-pill warning">Unknown</span>';
-  if (days < 0)  return `<span class="days-pill overdue">${Math.abs(days)}d overdue</span>`;
-  if (days <= 14) return `<span class="days-pill critical">${days}d left</span>`;
-  if (days <= 30) return `<span class="days-pill warning">${days}d left</span>`;
-  return `<span class="days-pill ok">${days}d left</span>`;
+async function loadRefData() {
+  const snap=await cachedGetDocs(query(collection(db,'clients'),orderBy('customerNo','asc')));
+  allClients=snap.docs.map(d=>({id:d.id,...d.data()}));
+  try{const s=await cachedGetDoc(doc(db,'config','settings'));companySettings=s.exists()?s.data():{};}catch{}
+
+  // Default date range: start of year to today
+  const now=new Date();
+  $('date-from').value=`${now.getFullYear()}-01-01`;
+  $('date-to').value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
 }
 
-function renewalStatusBadge(s) {
-  const m={'pending':'amber','proposal-sent':'blue','awaiting-response':'purple','renewed':'green','declined':'red'};
-  const labels={'pending':'Pending','proposal-sent':'Proposal Sent','awaiting-response':'Awaiting Response','renewed':'Renewed','declined':'Declined'};
-  return `<span class="badge badge-${m[s]||'gray'}">${labels[s]||s||'Pending'}</span>`;
-}
-
-async function logAction(action,entityType,entityId,description){
-  const entry={action,entityType,entityId,description,
-    performedBy:currentUser?.email||'unknown',
-    performedByUid:currentUser?.uid||'',
-    page:'renewals',createdAt:serverTimestamp()};
-  try{
-    await smartAddDoc(collection(db,'audit_log'),entry);
-  }catch(err){
-    console.error('[audit_log] Write failed (',err.code,'):',err.message,'\nEntry:',JSON.stringify({action,entityType,entityId,description,page:'renewals'}));
-  }
-}
-
-/* ── Schedule helpers (reused from contracts.html) ── */
-function addMonths(date,n){const d=new Date(date);d.setMonth(d.getMonth()+n);return d;}
-function getIntervalMonths(freq){return {monthly:1,'bi-monthly':2,quarterly:3,'semi-annual':6,annual:12,'one-time':null}[freq]||1;}
-function computeEndDate(startDate,freq,sessions){
-  if(freq==='one-time')return new Date(startDate);
-  return addMonths(startDate,getIntervalMonths(freq)*(sessions-1));
-}
-
-/* ── Get next contract number ── */
-async function getNextContractNo(){
-  let n=1;
-  await runTransaction(db,async tx=>{
-    const ref=doc(db,'config','counters');
-    const snap=await tx.get(ref);
-    if(!snap.exists()){tx.set(ref,{contractCounter:1});n=1;}
-    else{n=(snap.data().contractCounter||0)+1;tx.update(ref,{contractCounter:n});}
-  });
-      await invalidateAfterWrite('clients', 'contracts', 'treatments', 'payments', 'complaints', 'inspections', 'renewals', 'teams', 'users', 'config');
-  return `CTR-${String(n).padStart(5,'0')}`;
-}
-
-/* ── Load data ── */
-async function loadAll() {
-  // Clients
-  const cSnap=await cachedGetDocs(collection(db,'clients'));
-  clientMap={};
-  const agentSet=new Set();
-  cSnap.forEach(d=>{const c=d.data();clientMap[c.customerNo]=c;if(c.salesAgent)agentSet.add(c.salesAgent);});
-
-  // Teams
-  const tSnap=await cachedGetDocs(collection(db,'teams'));
-  teamsData=tSnap.docs.map(d=>({id:d.id,...d.data()}));
-  $('renew-team').innerHTML='<option value="">— Select Team —</option>'+teamsData.map(t=>`<option value="${t.teamName}">${t.teamName}</option>`).join('');
-
-  /* Load contract types & frequencies from settings */
-  let contractTypesFromSettings = [];
-  let contractFrequencies = [];
-  try {
-    const settingsSnap = await cachedGetDoc(doc(db,'config','settings'));
-    if (settingsSnap.exists()) {
-      const ss = settingsSnap.data();
-      contractTypesFromSettings = ss.contractTypesList || [];
-      contractFrequencies = ss.contractFrequencies || [];
-    }
-  } catch(e) { console.warn('Settings load failed:', e.message); }
-
-  /* Populate renew contract type select */
-  const rctEl = $('renew-contract-type');
-  if (rctEl) rctEl.innerHTML = (rctEl.querySelector('option[value=""]') ? '<option value="">— Select Type —</option>' : '') + contractTypesFromSettings.map(t => `<option>${t}</option>`).join('');
-
-  /* Populate renew-frequency */
-  $('renew-frequency').innerHTML = contractFrequencies.map(f => `<option value="${f.toLowerCase().replace(/\s+/g,'-')}">${f}</option>`).join('');
-
-
-  // Sales agents
-  try{const cfg=await cachedGetDoc(doc(db,'config','settings'));salesAgents=cfg.exists()?(cfg.data().salesAgents||[]):[];}catch{salesAgents=[];}
-  salesAgents.forEach(a=>agentSet.add(a));
-  salesAgents=[...agentSet].filter(Boolean).sort();
-  const agentOpts='<option value="">— Select Agent —</option>'+salesAgents.map(a=>`<option>${a}</option>`).join('');
-  $('renew-agent').innerHTML=agentOpts;
-
-  // Renewals map: contractId → renewal doc
-  const rSnap=await cachedGetDocs(collection(db,'renewals'));
-  renewalMap={};
-  rSnap.forEach(d=>{renewalMap[d.data().contractId]=d;});
-
-  // All contracts (not renewed/cancelled) — fetch ALL, filter client-side with LOCAL timezone
-  const coSnap=await cachedGetDocs(query(collection(db,'contracts'),orderBy('contractEndDate','asc')));
-  allContracts=coSnap.docs.map(d=>({id:d.id,...d.data()}))
-    .filter(c=>c.status!=='renewed'&&c.status!=='cancelled');
-
-  computeSummary();
-  applyFilters();
-}
-
-function computeSummary() {
-  const today = todayLocal();
-  const windowEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysWindow);
-
-  let total=0, renewed=0, pending=0, declined=0;
-  allContracts.forEach(c=>{
-    const end = toLocalDate(c.contractEndDate);
-    // Include contracts expiring within window OR already expired (negative days)
-    if (!end) return;
-    if (end > windowEnd) return; // too far in future
-
-    total++;
-    const renewal = renewalMap[c.id];
-    const rs = renewal ? renewal.data().status : 'pending';
-    if (rs==='renewed') renewed++;
-    else if (rs==='declined') declined++;
-    else pending++;
-  });
-  $('sc-total').textContent=total;
-  $('sc-total-sub').textContent=`Within ${daysWindow} days`;
-  $('sc-renewed').textContent=renewed;
-  $('sc-pending').textContent=pending;
-  $('sc-declined').textContent=declined;
-}
-
-/* ── Days filter ── */
-document.querySelectorAll('.days-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.days-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    daysWindow=Number(btn.dataset.days);
-    $('window-label').textContent=`Showing contracts expiring within ${daysWindow} days`;
-    computeSummary(); applyFilters();
-  });
-});
-
-/* ══════════════════════════════════
-   COLUMN SORT + FILTER ENGINE
-   (mirrors treatments.html behaviour)
-══════════════════════════════════ */
-let sortField = 'daysLeft', sortDir = 'asc';
-let activeColDropdown = null;
-let columnFilters = {}; // { colName: Set of allowed values }
-
-const RENEWAL_STATUS_LABELS = {
-  'pending':'Pending','proposal-sent':'Proposal Sent',
-  'awaiting-response':'Awaiting Response','renewed':'Renewed','declined':'Declined'
-};
-
-function getColValue(c, col) {
-  const renewal = renewalMap[c.id];
-  const renewalStatus = renewal ? renewal.data().status : 'pending';
-  const clientData = clientMap[c.customerNo];
-  if (col === 'customerNo')     return c.customerNo || '';
-  if (col === 'clientName')     return cleanName(clientData?.clientName || '');
-  if (col === 'contractType')   return c.contractType || '';
-  if (col === 'contractEndDate')return fmtDate(c.contractEndDate);
-  if (col === 'daysLeft')       return daysLeft(c.contractEndDate) ?? 9999;
-  if (col === 'totalAmount')    return Number(c.totalAmount) || 0;
-  if (col === 'salesAgent')     return c.salesAgent || clientData?.salesAgent || '';
-  if (col === 'renewalStatus')  return RENEWAL_STATUS_LABELS[renewalStatus] || renewalStatus;
-  return '';
-}
-
-function getUniqueColValues(col) {
-  const vals = new Set();
-  allContracts.forEach(c => {
-    const v = getColValue(c, col).toString().trim();
-    if (v && v !== '—') vals.add(v);
-  });
-  return [...vals].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
-}
-
-function closeColDropdown() {
-  if (activeColDropdown) { activeColDropdown.remove(); activeColDropdown = null; }
-  document.removeEventListener('click', onDocClickCloseDropdown, true);
-}
-function onDocClickCloseDropdown(e) {
-  if (activeColDropdown && !activeColDropdown.contains(e.target) && !e.target.closest('.col-menu-btn'))
-    closeColDropdown();
-}
-
-function openColDropdown(col, th) {
-  closeColDropdown();
-  const values = getUniqueColValues(col);
-  const currentFilter = columnFilters[col];
-  const hasSortField = th.dataset.sort;
-
-  const dd = document.createElement('div');
-  dd.className = 'col-dropdown';
-  dd.innerHTML = `
-    ${hasSortField ? `
-      <div class="col-dropdown-item" data-action="sort-asc">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>Sort A → Z
-      </div>
-      <div class="col-dropdown-item" data-action="sort-desc">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>Sort Z → A
-      </div>
-      <div class="col-dropdown-sep"></div>` : ''}
-    <div class="col-dropdown-search"><input type="text" placeholder="Search…" id="col-search-input" /></div>
-    <div class="col-dropdown-values" id="col-values-list">
-      ${values.map(v => `<label><input type="checkbox" value="${v.replace(/"/g,'&quot;')}" ${!currentFilter || currentFilter.has(v) ? 'checked' : ''} />${v}</label>`).join('')}
-    </div>
-    <div class="col-dropdown-actions">
-      <button class="btn btn-ghost btn-sm" data-action="select-all" style="border:1px solid var(--border)">All</button>
-      <button class="btn btn-ghost btn-sm" data-action="select-none" style="border:1px solid var(--border)">None</button>
-      <button class="btn btn-primary btn-sm" data-action="apply">Apply</button>
-    </div>
-  `;
-
-  th.style.position = 'relative';
-  th.appendChild(dd);
-  activeColDropdown = dd;
-
-  dd.querySelector('#col-search-input').addEventListener('input', e => {
-    const q = e.target.value.toLowerCase();
-    dd.querySelectorAll('#col-values-list label').forEach(lbl => {
-      lbl.style.display = lbl.textContent.toLowerCase().includes(q) ? '' : 'none';
+/* ── Combobox ── */
+const searchInput=$('client-search'), dropdown=$('client-dropdown');
+searchInput.addEventListener('input',()=>{
+  const q=searchInput.value.toLowerCase().trim();
+  if(!q){dropdown.classList.remove('open');dropdown.innerHTML='';return;}
+  const res=allClients.filter(c=>[cleanName(c.clientName),c.customerNo,c.contactNumber||'',c.city||''].some(f=>f.toLowerCase().includes(q))).slice(0,10);
+  if(!res.length){dropdown.innerHTML='<div class="combobox-empty">No clients found</div>';dropdown.classList.add('open');return;}
+  dropdown.innerHTML=res.map(c=>`<div class="combobox-item" data-no="${c.customerNo}">
+    <div class="combobox-item-main">${cleanName(c.clientName)}</div>
+    <div class="combobox-item-sub">${c.customerNo} · ${c.contactNumber||'—'} · ${c.city||'—'}</div>
+  </div>`).join('');
+  dropdown.classList.add('open');
+  dropdown.querySelectorAll('.combobox-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+      selectedCustomerNo=item.dataset.no;
+      const c=allClients.find(x=>x.customerNo===selectedCustomerNo);
+      searchInput.value=`${cleanName(c?.clientName||'')} (${selectedCustomerNo})`;
+      dropdown.classList.remove('open');
+      generateSOA();
     });
   });
+});
+document.addEventListener('click',e=>{if(!$('cb-wrap').contains(e.target))dropdown.classList.remove('open');});
+$('date-from').addEventListener('change',()=>{if(selectedCustomerNo)generateSOA();});
+$('date-to').addEventListener('change',()=>{if(selectedCustomerNo)generateSOA();});
 
-  dd.querySelectorAll('[data-action="sort-asc"],[data-action="sort-desc"]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      sortField = th.dataset.sort;
-      sortDir = btn.dataset.action === 'sort-asc' ? 'asc' : 'desc';
-      document.querySelectorAll('.sort-icon').forEach(el => el.textContent = '');
-      const icon = document.getElementById('sort-' + sortField);
-      if (icon) icon.textContent = sortDir === 'asc' ? '▲' : '▼';
-      doSort();
-      closeColDropdown();
+/* ── Generate SOA ── */
+async function generateSOA() {
+  if(!selectedCustomerNo) return;
+  $('report-area').innerHTML=`<div style="text-align:center;padding:52px"><div class="spinner" style="margin:0 auto 12px"></div><p style="color:var(--text-muted)">Generating statement…</p></div>`;
+  $('btn-print').style.display='none';
+
+  const client=allClients.find(c=>c.customerNo===selectedCustomerNo);
+  const clientName=cleanName(client?.clientName||selectedCustomerNo);
+  const companyName=companySettings.companyName||'Pestastic Pest Control Services';
+  const companyAddr=companySettings.companyAddress||'';
+  const companyPhone=companySettings.companyPhone||'';
+  const genTime=new Date().toLocaleString('en-PH',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  // Date range filters
+  const dfrom=$('date-from').value, dto=$('date-to').value;
+  const fromDate=dfrom?new Date(...dfrom.split('-').map((v,i)=>i===1?Number(v)-1:Number(v))):null;
+  const toDate=dto?new Date(...dto.split('-').map((v,i)=>i===1?Number(v)-1:Number(v))):null;
+  if(toDate)toDate.setHours(23,59,59,999);
+
+  const dateRangeLabel=dfrom&&dto?`${fmtDate(fromDate)} – ${fmtDate(toDate)}`:'All dates';
+
+  // Fetch contracts for this customer
+  const coSnap=await cachedGetDocs(query(collection(db,'contracts'),where('customerNo','==',selectedCustomerNo)));
+  const contracts=coSnap.docs.map(d=>({id:d.id,...d.data()}))
+    .sort((a,b)=>{const da=toLocalDate(a.contractStartDate),db2=toLocalDate(b.contractStartDate);return da&&db2?da-db2:0;});
+  // Build contractMap for fast lookup by contractId
+  const soaContractMap={};
+  contracts.forEach(c=>soaContractMap[c.id]=c);
+
+  // Fetch all payments for this customer
+  const pySnap=await cachedGetDocs(query(collection(db,'payments'),where('customerNo','==',selectedCustomerNo)));
+  let payments=pySnap.docs.map(d=>({id:d.id,...d.data()}));
+
+  // Filter payments by date range — include if EITHER dueDate OR paymentDate falls within range
+  // Also always include payments that are already collected (paid), regardless of dueDate
+  const allPaymentsUnfiltered=[...payments];
+  if(fromDate||toDate) {
+    payments=payments.filter(p=>{
+      const dd=toLocalDate(p.dueDate);
+      const pd=toLocalDate(p.paymentDate);
+      // A payment is in-range if its dueDate OR paymentDate falls within the period
+      const dueDateInRange=dd&&(!fromDate||dd>=fromDate)&&(!toDate||dd<=toDate);
+      const payDateInRange=pd&&(!fromDate||pd>=fromDate)&&(!toDate||pd<=toDate);
+      return dueDateInRange||payDateInRange;
     });
-  });
-
-  dd.querySelector('[data-action="select-all"]')?.addEventListener('click', () => {
-    dd.querySelectorAll('#col-values-list input[type="checkbox"]').forEach(cb => cb.checked = true);
-  });
-  dd.querySelector('[data-action="select-none"]')?.addEventListener('click', () => {
-    dd.querySelectorAll('#col-values-list input[type="checkbox"]').forEach(cb => cb.checked = false);
-  });
-
-  dd.querySelector('[data-action="apply"]')?.addEventListener('click', () => {
-    const checked = [...dd.querySelectorAll('#col-values-list input[type="checkbox"]:checked')].map(cb => cb.value);
-    const allChecked = checked.length === values.length;
-    if (allChecked) delete columnFilters[col];
-    else columnFilters[col] = new Set(checked);
-    th.style.background = columnFilters[col] ? 'var(--primary-light)' : '';
-    closeColDropdown();
-    applyFilters();
-  });
-
-  setTimeout(() => document.addEventListener('click', onDocClickCloseDropdown, true), 10);
-  dd.querySelector('#col-search-input').focus();
-}
-
-// ▾ button opens dropdown
-document.querySelectorAll('.col-menu-btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    openColDropdown(btn.dataset.col, btn.closest('th'));
-  });
-});
-
-// Click header text → sort toggle
-document.querySelectorAll('th.col-header').forEach(th => {
-  th.addEventListener('click', e => {
-    if (e.target.closest('.col-menu-btn') || e.target.closest('.col-dropdown')) return;
-    const field = th.dataset.sort;
-    if (!field) return;
-    if (sortField === field) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-    else { sortField = field; sortDir = 'asc'; }
-    document.querySelectorAll('.sort-icon').forEach(el => el.textContent = '');
-    const icon = document.getElementById('sort-' + field);
-    if (icon) icon.textContent = sortDir === 'asc' ? '▲' : '▼';
-    doSort();
-  });
-});
-
-function doSort() {
-  filteredContracts.sort((a, b) => {
-    let av, bv;
-    if (sortField === 'daysLeft') {
-      av = daysLeft(a.contractEndDate) ?? 9999;
-      bv = daysLeft(b.contractEndDate) ?? 9999;
-    } else if (sortField === 'contractEndDate') {
-      const da  = toLocalDate(a.contractEndDate);
-      const db2 = toLocalDate(b.contractEndDate);
-      av = da ? da.getTime() : 0; bv = db2 ? db2.getTime() : 0;
-    } else if (sortField === 'totalAmount') {
-      av = Number(a.totalAmount)||0; bv = Number(b.totalAmount)||0;
-    } else {
-      av = getColValue(a, sortField).toString().toLowerCase();
-      bv = getColValue(b, sortField).toString().toLowerCase();
-    }
-    if (av < bv) return sortDir === 'asc' ? -1 : 1;
-    if (av > bv) return sortDir === 'asc' ?  1 : -1;
-    return 0;
-  });
-  currentPage = 1;
-  renderTable();
-}
-
-/* ── Filters ── */
-function applyFilters() {
-  const today = todayLocal();
-  const windowEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysWindow);
-  const q = $('search-input').value.toLowerCase().trim();
-
-  filteredContracts = allContracts.filter(c=>{
-    const end = toLocalDate(c.contractEndDate);
-    if (!end) return false;
-    if (end > windowEnd) return false; // days-window filter (kept)
-
-    const renewal = renewalMap[c.id];
-    const renewalStatus = renewal ? renewal.data().status : 'pending';
-    const clientData = clientMap[c.customerNo];
-    const clientName = cleanName(clientData?.clientName||'');
-
-    const matchQ = !q || [c.customerNo,clientName,c.contractType,c.contractNumber,
-      renewalStatus,c.salesAgent||clientData?.salesAgent||'']
-      .some(f=>(f||'').toLowerCase().includes(q));
-
-    // Column header filters
-    let matchCol = true;
-    for (const [col, allowed] of Object.entries(columnFilters)) {
-      if (!allowed.has(getColValue(c, col).toString().trim())) { matchCol = false; break; }
-    }
-
-    return matchQ && matchCol;
-  });
-
-  currentPage=1; doSort();
-}
-
-$('search-input').addEventListener('input', applyFilters);
-
-$('btn-clear-filters').addEventListener('click', () => {
-  $('search-input').value = '';
-  columnFilters = {};
-  document.querySelectorAll('thead th').forEach(th => th.style.background = '');
-  applyFilters();
-});
-
-/* ── Render table ── */
-function renderTable() {
-  const total=filteredContracts.length, totalPages=Math.max(1,Math.ceil(total/PER_PAGE));
-  currentPage=Math.min(currentPage,totalPages);
-  const start=(currentPage-1)*PER_PAGE, end=Math.min(start+PER_PAGE,total);
-  const page=filteredContracts.slice(start,end);
-
-  $('pagination-info').textContent=total===0?'No records found':`Showing ${start+1}–${end} of ${total} contracts`;
-
-  if(!page.length){
-    $('renewals-tbody').innerHTML=`<tr><td colspan="9"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><h3>No expiring contracts</h3><p>No contracts are expiring within the selected window. Try increasing the days filter or checking your data.</p></div></td></tr>`;
-    $('pagination-controls').innerHTML=''; return;
   }
+  payments.sort((a,b)=>{const da=toLocalDate(a.dueDate),db2=toLocalDate(b.dueDate);return da&&db2?da-db2:0;});
 
-  $('renewals-tbody').innerHTML=page.map(c=>{
-    const renewal = renewalMap[c.id];
-    const renewalStatus = renewal ? renewal.data().status : 'pending';
-    const dl = daysLeft(c.contractEndDate);
-    const clientData = clientMap[c.customerNo];
-    const clientName = cleanName(clientData?.clientName||c.customerNo||'—');
-    const isAlreadyRenewed = renewalStatus==='renewed';
+  // ── Per-contract SOA logic ──
+  // Pending status = NOT received. Everything else = received.
+  const PENDING_STATUSES=['Pending'];
+  const isReceived=(p)=>!PENDING_STATUSES.includes(p.status);
 
-    return `<tr>
-      <td class="mono">${c.customerNo||'—'}</td>
-      <td style="font-weight:500;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${clientName}">${clientName}</td>
-      <td style="font-size:12.5px">${c.contractType||'—'}</td>
-      <td style="white-space:nowrap${dl!==null&&dl<0?';color:var(--red-text);font-weight:600':''}">${fmtDate(c.contractEndDate)}</td>
-      <td>${daysPill(dl)}</td>
-      <td style="font-variant-numeric:tabular-nums;font-weight:600">${fmtCur(c.totalAmount)}</td>
-      <td class="muted">${c.salesAgent||clientData?.salesAgent||'—'}</td>
-      <td>${renewalStatusBadge(renewalStatus)}</td>
-      <td>
-        <div class="actions-cell">
-          ${!isAlreadyRenewed ? `
-            <button class="btn btn-sm btn-primary btn-renew" data-id="${c.id}">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Renew
-            </button>
-          ` : `<span style="font-size:12px;color:var(--green-text);font-weight:600">✓ Renewed</span>`}
-          <button class="btn btn-sm btn-secondary btn-update-status" data-id="${c.id}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Status
-          </button>
+  // Group ALL payments (unfiltered) by contractId for accurate totals
+  const paymentsByContract={};
+  allPaymentsUnfiltered.forEach(p=>{
+    const cid=p.contractId||'_unassigned';
+    if(!paymentsByContract[cid])paymentsByContract[cid]=[];
+    paymentsByContract[cid].push(p);
+  });
+
+  // Group date-filtered payments by contractId for ledger display
+  const filteredPaymentsByContract={};
+  payments.forEach(p=>{
+    const cid=p.contractId||'_unassigned';
+    if(!filteredPaymentsByContract[cid])filteredPaymentsByContract[cid]=[];
+    filteredPaymentsByContract[cid].push(p);
+  });
+
+  // Build per-contract summaries using ALL payments (not date-filtered)
+  const contractSummaries=contracts.map(c=>{
+    const allPmts=paymentsByContract[c.id]||[];
+    const contractAmt=Number(c.totalAmount||0);
+    const totalReceived=allPmts.filter(p=>isReceived(p)).reduce((s,p)=>s+Number(p.amount||0),0);
+    const totalPendingC=allPmts.filter(p=>!isReceived(p)).reduce((s,p)=>s+Number(p.amount||0),0);
+    // Addendum = any received amount beyond original contract price
+    const addendum=Math.max(0,totalReceived+totalPendingC-contractAmt);
+    const effectiveBilled=contractAmt+addendum;
+    const balance=effectiveBilled-totalReceived;
+    return {contract:c, contractAmt, totalReceived, totalPendingC, addendum, effectiveBilled, balance};
+  });
+
+  // Unassigned payments (not linked to any contract)
+  const unassignedAll=paymentsByContract['_unassigned']||[];
+  const unassignedFiltered=filteredPaymentsByContract['_unassigned']||[];
+
+  // Grand totals from ALL payments
+  const totalBilledAll=contractSummaries.reduce((s,cs)=>s+cs.effectiveBilled,0)+unassignedAll.filter(p=>!isReceived(p)).reduce((s,p)=>s+Number(p.amount||0),0);
+  const totalPaidAll=contractSummaries.reduce((s,cs)=>s+cs.totalReceived,0)+unassignedAll.filter(p=>isReceived(p)).reduce((s,p)=>s+Number(p.amount||0),0);
+  const totalPendingAll=contractSummaries.reduce((s,cs)=>s+cs.totalPendingC,0)+unassignedAll.filter(p=>!isReceived(p)).reduce((s,p)=>s+Number(p.amount||0),0);
+  const outstanding=totalBilledAll-totalPaidAll;
+
+  // For the filtered view
+  const totalBilled=contractSummaries.reduce((s,cs)=>s+cs.effectiveBilled,0);
+  const totalPaid=contractSummaries.reduce((s,cs)=>s+cs.totalReceived,0);
+  const totalPending=contractSummaries.reduce((s,cs)=>s+cs.totalPendingC,0);
+
+  /* ── Build HTML ── */
+  let html=`
+    <!-- LETTERHEAD -->
+    <div class="letterhead">
+      <div class="lh-logo">
+        <div class="lh-logo-icon"><img src="logo.jpg" alt="Pestastic" style="width:28px;height:28px;object-fit:contain;filter:brightness(0) invert(1)" /></div>
+        <div class="lh-company">
+          <h1>${companyName}</h1>
+          <p>${[companyAddr,companyPhone].filter(Boolean).join(' · ')}</p>
         </div>
-      </td>
-    </tr>`;
-  }).join('');
+      </div>
+      <div class="lh-right">
+        <div class="lh-doc-title">Statement of Account</div>
+        <div class="lh-doc-sub">${selectedCustomerNo}</div>
+        <div class="lh-doc-meta">Generated: ${genTime}</div>
+      </div>
+    </div>
 
-  // ── Bind action buttons (MUST be before pagination return) ──
-  document.querySelectorAll('.btn-update-status').forEach(b=>b.addEventListener('click',()=>openStatusModal(b.dataset.id)));
-  document.querySelectorAll('.btn-renew').forEach(b=>b.addEventListener('click',()=>openRenewModal(b.dataset.id)));
+    <!-- CLIENT HEADER -->
+    <div class="client-header">
+      <div class="client-header-left">
+        <h2>${clientName}</h2>
+        <p>
+          ${client?.contactNumber?'📞 '+client.contactNumber+'<br>':''}
+          ${client?.emailAddress?'✉ '+client.emailAddress+'<br>':''}
+          ${client?.address?'📍 '+client.address:''}
+        </p>
+      </div>
+      <div class="client-header-right">
+        <div class="customer-no">${selectedCustomerNo}</div>
+        <p>Sales Agent: ${client?.salesAgent||'—'}</p>
+      </div>
+    </div>
 
-  // Pagination
-  const ctrl=$('pagination-controls');
-  if(totalPages<=1){ctrl.innerHTML='';return;}
-  const pages=[];
-  for(let i=1;i<=totalPages;i++){if(i===1||i===totalPages||(i>=currentPage-1&&i<=currentPage+1))pages.push(i);else if(pages[pages.length-1]!=='…')pages.push('…');}
-  ctrl.innerHTML=`<button class="page-btn" ${currentPage<=1?'disabled':''} data-p="${currentPage-1}">‹</button>${pages.map(p=>p==='…'?`<button class="page-btn" disabled>…</button>`:`<button class="page-btn${p===currentPage?' active':''}" data-p="${p}">${p}</button>`).join('')}<button class="page-btn" ${currentPage>=totalPages?'disabled':''} data-p="${currentPage+1}">›</button>`;
-  ctrl.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>{currentPage=Number(b.dataset.p);renderTable();}));
-}
+    <!-- DATE RANGE -->
+    <div class="date-range-badge">Period: ${dateRangeLabel}</div>`;
 
+  /* ── Contracts section ── */
+  html+=`<div class="contracts-section">
+    <div class="section-title">Active Contracts (${contracts.length})</div>`;
 
-/* ── Build contracts page URL for renewal redirect ── */
-function buildRenewalUrl(contract) {
-  const p = new URLSearchParams({
-    mode:         'renewal',
-    oldId:        contract.id,
-    oldNo:        contract.contractNumber || '',
-    oldEnd:       contract.contractEndDate
-      ? (contract.contractEndDate.toDate
-          ? contract.contractEndDate.toDate().toISOString().slice(0,10)
-          : String(contract.contractEndDate).slice(0,10))
-      : '',
-    customerNo:   contract.customerNo   || '',
-    contractType: contract.contractType  || '',
-    method:       contract.treatmentMethod || '',
-    frequency:    contract.frequency    || '',
-    sessions:     contract.noOfSessions || '',
-    warranty:     contract.warrantyPeriod || '',
-    amount:       contract.totalAmount  || '',
-    team:         contract.assignedTeam || '',
-    agent:        contract.salesAgent   || '',
-  });
-  return 'contracts.html?' + p.toString();
-}
-
-/* ── Update Status Modal ── */
-function openStatusModal(contractId) {
-  const c=allContracts.find(x=>x.id===contractId); if(!c) return;
-  const renewal=renewalMap[contractId];
-  const clientName=cleanName(clientMap[c.customerNo]?.clientName||'—');
-  $('status-contract-id').value=contractId;
-  $('status-renewal-id').value=renewal?renewal.id:'';
-  $('status-modal-subtitle').textContent=`${clientName} · ${c.contractType||''}`;
-  $('status-select').value=renewal?renewal.data().status:'pending';
-  $('status-proposal-amount').value=renewal?renewal.data().proposalAmount||'':'';
-  $('status-notes').value=renewal?renewal.data().notes||'':'';
-  $('status-btn-text').textContent='Save Status';
-  openModal('status-modal');
-}
-
-$('btn-save-status').addEventListener('click', async()=>{
-  const contractId=$('status-contract-id').value;
-  const renewalId=$('status-renewal-id').value;
-  const status=$('status-select').value;
-  const proposalAmount=parseFloat($('status-proposal-amount').value)||null;
-  const notes=$('status-notes').value.trim();
-
-  const btn=$('btn-save-status'); btn.disabled=true; $('status-btn-text').textContent='Saving…';
-
-  // If marking as Renewed, redirect to contracts page to create the new contract properly
-  if(status === 'renewed') {
-    const c = allContracts.find(x=>x.id===contractId);
-    if(c) {
-      // Save the 'renewed' status first so it's recorded
-      try {
-        const renewData={contractId, status:'renewed', proposalAmount, notes, updatedAt:serverTimestamp()};
-        if(renewalId) {
-          await smartUpdateDoc(doc(db,'renewals',renewalId), renewData);
-        } else {
-          const c2=allContracts.find(x=>x.id===contractId);
-          renewData.customerNo=c2?.customerNo||'';
-          renewData.createdAt=serverTimestamp();
-          await smartAddDoc(collection(db,'renewals'), renewData);
-        }
-      } catch {}
-      closeModal('status-modal');
-      // Navigate to contracts page to create the renewal contract
-      window.location.href = buildRenewalUrl(c);
-      return;
-    }
-  }
-
-  try{
-    const data={contractId, status, proposalAmount, notes, updatedAt:serverTimestamp()};
-    if(renewalId){
-      await smartUpdateDoc(doc(db,'renewals',renewalId),data);
-      // Capture previous fields first, then merge — do NOT self-reference renewalMap[contractId].data()
-      const prevData = renewalMap[contractId] ? {...renewalMap[contractId].data()} : {};
-      const merged = {...prevData, ...data};
-      renewalMap[contractId]={id:renewalId, data:()=>merged};
-    } else {
-      const c=allContracts.find(x=>x.id===contractId);
-      data.customerNo=c?.customerNo||'';
-      data.createdAt=serverTimestamp();
-      const ref=await smartAddDoc(collection(db,'renewals'),data);
-      const snapshot={...data};
-      renewalMap[contractId]={id:ref.id, data:()=>snapshot};
-      $('status-renewal-id').value=ref.id;
-    }
-    await logAction('updated','renewal',contractId,`Updated renewal status to "${status}" for contract ${contractId}`);
-    closeModal('status-modal');
-    showToast(`Renewal status updated to "${status}".`);
-    computeSummary(); applyFilters();
-  }catch(err){showToast('Failed: '+err.message,'error');}
-  btn.disabled=false; $('status-btn-text').textContent='Save Status';
-});
-
-/* ── Renew Contract Modal ── */
-async function openRenewModal(contractId) {
-  const c=allContracts.find(x=>x.id===contractId); if(!c) return;
-  // Redirect to contracts page with pre-filled renewal data
-  window.location.href = buildRenewalUrl(c);
-}
-// (Legacy function kept for compatibility — actual renew modal no longer used)
-async function _openRenewModalLegacy(contractId) {
-  const c=allContracts.find(x=>x.id===contractId); if(!c) return;
-  const clientData=clientMap[c.customerNo];
-  const clientName=cleanName(clientData?.clientName||c.customerNo||'—');
-
-  $('renew-old-contract-id').value=contractId;
-  $('renew-modal-subtitle').textContent=`${clientName} · ${c.contractType||''}`;
-
-  // Fill old contract reference banner
-  const endDate=toLocalDate(c.contractEndDate);
-  const dl=daysLeft(c.contractEndDate);
-  $('ocb-grid').innerHTML=`
-    <div class="ocb-item"><label>Client</label><span>${clientName}</span></div>
-    <div class="ocb-item"><label>Customer No</label><span>${c.customerNo||'—'}</span></div>
-    <div class="ocb-item"><label>Contract Type</label><span>${c.contractType||'—'}</span></div>
-    <div class="ocb-item"><label>End Date</label><span style="color:${dl!==null&&dl<0?'var(--red-text)':'inherit'}">${fmtDate(c.contractEndDate)}${dl!==null?` (${dl<0?Math.abs(dl)+'d overdue':dl+'d left'})`:''}</span></div>
-    <div class="ocb-item"><label>Amount</label><span>${fmtCur(c.totalAmount)}</span></div>
-    <div class="ocb-item"><label>Frequency</label><span>${c.frequency||'—'}</span></div>`;
-
-  // Pre-fill form from old contract
-  $('renew-contract-type').value=c.contractType||'Termite Control';
-  $('renew-treatment-method').value=c.treatmentMethod||'';
-  $('renew-frequency').value=c.frequency||'monthly';
-  $('renew-sessions').value=c.noOfSessions||12;
-  $('renew-warranty').value=c.warrantyPeriod||0;
-  $('renew-amount').value=c.totalAmount||'';
-  $('renew-team').value=c.assignedTeam||'';
-  $('renew-agent').value=c.salesAgent||clientData?.salesAgent||'';
-  $('renew-notes').value='';
-
-  // New start date = day after old end date
-  if(endDate){
-    const nextDay=new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate()+1);
-    const iso=`${nextDay.getFullYear()}-${String(nextDay.getMonth()+1).padStart(2,'0')}-${String(nextDay.getDate()).padStart(2,'0')}`;
-    $('renew-start-date').value=iso;
+  if(contracts.length){
+    contracts.forEach(c=>{
+      const today=new Date();today.setHours(0,0,0,0);
+      const endDate=toLocalDate(c.contractEndDate);
+      let statusCls='other', statusLbl=c.status||'—';
+      if(c.status==='active'&&endDate&&endDate<today){statusCls='expired';statusLbl='Expired';}
+      else if(c.status==='active'){statusCls='active';statusLbl='Active';}
+      else if(c.status==='renewed'){statusCls='other';statusLbl='Renewed';}
+      html+=`<div class="contract-card">
+        <div class="cc-left">
+          <div class="cc-no">${c.contractNumber||c.id.slice(0,8)}</div>
+          <div class="cc-type">${c.contractType||'—'}</div>
+          <div class="cc-period">${fmtDate(c.contractStartDate)} – ${fmtDate(c.contractEndDate)} · ${c.frequency||'—'} · ${c.noOfSessions||'?'} sessions</div>
+        </div>
+        <div class="cc-right">
+          <div class="cc-amount">${fmtCur(c.totalAmount)}</div>
+          <span class="cc-status ${statusCls}">${statusLbl}</span>
+        </div>
+      </div>`;
+    });
   } else {
-    $('renew-start-date').value='';
+    html+=`<p style="color:#9ca3af;font-size:13px;padding:8px 0">No contracts on record.</p>`;
   }
+  html+=`</div>`;
 
-  $('renew-schedule-preview').style.display='none';
-  updateRenewEndDate();
-  $('renew-btn-text').textContent='Create New Contract';
-  openModal('renew-modal');
-}
+  /* ── Per-contract SOA sections ── */
+  let grandRunningBalance=0;
+  let rowNum=0;
 
-/* ── Auto end-date in renew modal ── */
-function updateRenewEndDate(){
-  const startStr=$('renew-start-date').value;
-  const freq=$('renew-frequency').value;
-  const sessions=parseInt($('renew-sessions').value)||0;
-  if(!startStr||!freq||!sessions){$('renew-end-date').value='';$('renew-schedule-preview').style.display='none';return;}
-  const[y,m,d]=startStr.split('-').map(Number);
-  const startDate=new Date(y,m-1,d);
-  const endDate=computeEndDate(startDate,freq,sessions);
-  $('renew-end-date').value=`${endDate.getFullYear()}-${String(endDate.getMonth()+1).padStart(2,'0')}-${String(endDate.getDate()).padStart(2,'0')}`;
-  // Schedule preview
-  const interval=getIntervalMonths(freq);
-  const lines=[];
-  for(let i=0;i<Math.min(sessions,4);i++){
-    const td=freq==='one-time'?startDate:addMonths(startDate,interval*i);
-    lines.push(`Treatment ${i+1}: ${td.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'})}`);
-  }
-  if(sessions>4)lines.push(`… and ${sessions-4} more treatment${sessions-4===1?'':'s'}`);
-  $('renew-schedule-text').innerHTML=lines.join('<br>');
-  $('renew-schedule-preview').style.display='';
-}
-
-['renew-start-date','renew-frequency','renew-sessions'].forEach(id=>{$(id).addEventListener('change',updateRenewEndDate);$(id).addEventListener('input',updateRenewEndDate);});
-
-/* ── Confirm Renew ── */
-$('btn-confirm-renew').addEventListener('click', async()=>{
-  const oldContractId=$('renew-old-contract-id').value;
-  const oldContract=allContracts.find(x=>x.id===oldContractId); if(!oldContract) return;
-
-  const contractType=$('renew-contract-type').value;
-  const freq=$('renew-frequency').value;
-  const sessions=parseInt($('renew-sessions').value)||0;
-  const startStr=$('renew-start-date').value;
-  const amount=parseFloat($('renew-amount').value)||0;
-
-  if(!contractType){showToast('Contract type required.','error');return;}
-  if(!sessions){showToast('Sessions required.','error');return;}
-  if(!startStr){showToast('Start date required.','error');return;}
-  if(!amount){showToast('Amount required.','error');return;}
-
-  const btn=$('btn-confirm-renew'); btn.disabled=true; $('renew-btn-text').textContent='Creating…';
-
-  const [y,m,d]=startStr.split('-').map(Number);
-  const startDate=new Date(y,m-1,d);
-  const endDate=computeEndDate(startDate,freq,sessions);
-
-  try{
-    // 1. Get new contract number
-    const contractNo=await getNextContractNo();
-
-    // 2. Create new contract
-    const newContractData={
-      customerNo:       oldContract.customerNo,
-      contractNumber:   contractNo,
-      contractType,
-      treatmentMethod:  $('renew-treatment-method').value.trim(),
-      frequency:        freq,
-      noOfSessions:     sessions,
-      warrantyPeriod:   parseInt($('renew-warranty').value)||0,
-      contractStartDate:startDate,
-      contractEndDate:  endDate,
-      totalAmount:      amount,
-      assignedTeam:     $('renew-team').value,
-      salesAgent:       $('renew-agent').value,
-      communicationSource: oldContract.communicationSource||'',
-      status:           'active',
-      notes:            $('renew-notes').value.trim(),
-      renewedFromContractId: oldContractId,
-      createdAt:        serverTimestamp(),
-      updatedAt:        serverTimestamp()
-    };
-    const newContractRef=await smartAddDoc(collection(db,'contracts'),newContractData);
-
-    // 3. Generate treatment + payment schedules
-    const interval=getIntervalMonths(freq);
-    const batch=writeBatch(db);
-
-    for(let i=0;i<sessions;i++){
-      const tDate=freq==='one-time'?startDate:addMonths(startDate,interval*i);
-      batch.set(doc(collection(db,'treatments')),{
-        contractId:newContractRef.id, customerNo:oldContract.customerNo,
-        contractType, treatmentNo:`TRT-${String(i+1).padStart(3,'0')}`,
-        treatmentDate:tDate, status:'scheduled',
-        assignedTeam:$('renew-team').value||'',
-        chemicalsUsed:'', technician:'', notes:'', createdAt:serverTimestamp()
-      });
-      const pDate=freq==='one-time'?startDate:addMonths(startDate,interval*i);
-      batch.set(doc(collection(db,'payments')),{
-        contractId:newContractRef.id, customerNo:oldContract.customerNo,
-        amount:parseFloat((amount/sessions).toFixed(2)),
-        dueDate:pDate, paymentDate:null,
-        status:'Pending', paymentMode:'', orNumber:'', receivedBy:'', remarks:'',
-        createdAt:serverTimestamp()
-      });
-    }
-
-    // 4. Update old contract status to 'renewed'
-    batch.update(doc(db,'contracts',oldContractId),{status:'renewed',renewedToContractId:newContractRef.id,updatedAt:serverTimestamp()});
-
-    // 5. Upsert renewal record
-    const existingRenewal=renewalMap[oldContractId];
-    const renewalData={
-      contractId:     oldContractId,
-      newContractId:  newContractRef.id,
-      customerNo:     oldContract.customerNo,
-      status:         'renewed',
-      notes:          $('renew-notes').value.trim(),
-      updatedAt:      serverTimestamp()
-    };
-    if(existingRenewal){
-      batch.update(doc(db,'renewals',existingRenewal.id),renewalData);
-    } else {
-      renewalData.createdAt=serverTimestamp();
-      batch.set(doc(collection(db,'renewals')),renewalData);
-    }
-
-    await batch.commit();
-      await invalidateAfterWrite('clients', 'contracts', 'treatments', 'payments', 'complaints', 'inspections', 'renewals', 'teams', 'users', 'config');
-
-    await logAction('created','renewal',newContractRef.id,
-      `Renewed contract ${oldContract.contractNumber||oldContractId} → ${contractNo} for ${oldContract.customerNo}. ${sessions} treatments + ${sessions} payments generated.`);
-
-    // Update local state — remove old, add new contract
-    oldContract.status='renewed';
-    allContracts=allContracts.filter(x=>x.id!==oldContractId);
-    allContracts.push({
-      id:newContractRef.id, ...newContractData,
-      contractStartDate:startDate, contractEndDate:endDate
+  contractSummaries.forEach(cs=>{
+    const c=cs.contract;
+    const cPayments=(filteredPaymentsByContract[c.id]||[]).sort((a,b)=>{
+      const da=toLocalDate(a.dueDate||a.paymentDate),db2=toLocalDate(b.dueDate||b.paymentDate);
+      return da&&db2?da-db2:0;
     });
 
-    closeModal('renew-modal');
-    showToast(`Contract renewed! New contract ${contractNo} created with ${sessions} treatments & payments.`, 'success', 'Contract Renewed');
-    computeSummary(); applyFilters();
-  }catch(err){dismissLoadingScreen();console.error(err);showToast('Failed: '+err.message,'error');}
-  btn.disabled=false; $('renew-btn-text').textContent='Create New Contract';
-});
+    html+=`<div class="soa-section" style="margin-bottom:24px">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>${c.contractNumber||c.id.slice(0,8)} — ${c.contractType||'—'}</span>
+        <span style="font-size:11px;font-weight:600;color:${cs.balance>0?'#dc2626':'#15803d'}">Balance: ${fmtCur(cs.balance)}</span>
+      </div>`;
 
-/* ── Export CSV ── */
-$('btn-export-csv').addEventListener('click',()=>{
-  const headers=['customerNo','clientName','contractType','contractEndDate','daysLeft','totalAmount','salesAgent','renewalStatus','renewalNotes'];
-  const rows=filteredContracts.map(c=>{
-    const renewal=renewalMap[c.id];
-    const dl=daysLeft(c.contractEndDate);
-    return[
-      c.customerNo, cleanName(clientMap[c.customerNo]?.clientName||''),
-      c.contractType, fmtDate(c.contractEndDate),
-      dl!==null?dl:'',c.totalAmount,
-      c.salesAgent||clientMap[c.customerNo]?.salesAgent||'',
-      renewal?renewal.data().status:'pending',
-      renewal?renewal.data().notes||'':''
-    ];
+    // Contract info bar
+    html+=`<div style="display:flex;gap:16px;padding:8px 12px;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:4px;margin-bottom:8px;font-size:12px;color:#6b7280;flex-wrap:wrap">
+      <span>Contract Amount: <strong style="color:#111">${fmtCur(cs.contractAmt)}</strong></span>
+      ${cs.addendum>0?`<span>Addendum: <strong style="color:#1d4ed8">+${fmtCur(cs.addendum)}</strong></span>`:''}
+      <span>Effective Billed: <strong style="color:#111">${fmtCur(cs.effectiveBilled)}</strong></span>
+      <span>Received: <strong style="color:#15803d">${fmtCur(cs.totalReceived)}</strong></span>
+      <span>Pending: <strong style="color:#f59e0b">${fmtCur(cs.totalPendingC)}</strong></span>
+      <span>Period: ${fmtDate(c.contractStartDate)} – ${fmtDate(c.contractEndDate)}</span>
+    </div>`;
+
+    // Ledger table for this contract
+    html+=`<table class="soa-table"><thead><tr>
+      <th>#</th><th>Date</th><th>Due Date</th><th>OR No.</th><th>Description</th><th>Status</th>
+      <th class="right">Debit ₱</th>
+      <th class="right">Credit ₱</th>
+      <th class="right">Running Balance ₱</th>
+    </tr></thead><tbody>`;
+
+    // First row: contract billing
+    let contractBalance=Number(cs.contractAmt);
+    grandRunningBalance+=contractBalance;
+    rowNum++;
+    html+=`<tr class="row-debit">
+      <td class="num">${rowNum}</td>
+      <td class="nowrap">${fmtDate(c.contractStartDate)}</td>
+      <td class="nowrap" style="color:#9ca3af">—</td>
+      <td class="mono">—</td>
+      <td><span class="type-tag debit">DEBIT</span> <span style="font-size:12px;margin-left:6px;color:#374151">Contract Billed: ${c.contractType||'—'}</span></td>
+      <td><span style="font-size:11px;color:#6b7280">—</span></td>
+      <td class="right">${fmtCur(cs.contractAmt)}</td>
+      <td class="right" style="color:#15803d">—</td>
+      <td class="right balance-positive">${fmtCur(grandRunningBalance)}</td>
+    </tr>`;
+
+    // Addendum row if applicable
+    if(cs.addendum>0){
+      grandRunningBalance+=cs.addendum;
+      contractBalance+=cs.addendum;
+      rowNum++;
+      html+=`<tr class="row-debit" style="background:#eff6ff!important">
+        <td class="num">${rowNum}</td>
+        <td class="nowrap">${fmtDate(c.contractStartDate)}</td>
+        <td class="nowrap" style="color:#9ca3af">—</td>
+        <td class="mono">—</td>
+        <td><span class="type-tag debit" style="background:#dbeafe;color:#1d4ed8">ADDENDUM</span> <span style="font-size:12px;margin-left:6px;color:#374151">Additional charges beyond contract</span></td>
+        <td><span style="font-size:11px;color:#6b7280">—</span></td>
+        <td class="right" style="color:#1d4ed8">${fmtCur(cs.addendum)}</td>
+        <td class="right" style="color:#15803d">—</td>
+        <td class="right balance-positive">${fmtCur(grandRunningBalance)}</td>
+      </tr>`;
+    }
+
+    // Payment rows
+    cPayments.forEach(p=>{
+      const paid=isReceived(p);
+      const isPending=!paid;
+      rowNum++;
+      const modeLabel={'cash':'Cash','check':'Check','bank-transfer':'Bank Transfer','credit-card':'Credit Card','gcash':'GCash','maya':'Maya'}[p.paymentMode]||p.paymentMode||'—';
+
+      if(paid){
+        grandRunningBalance-=Number(p.amount||0);
+        contractBalance-=Number(p.amount||0);
+      }
+
+      const statusColor=isPending?'#f59e0b':'#15803d';
+      const statusLabel=isPending?'Pending':(p.status||'Received');
+      const statusBadge=`<span style="display:inline-block;padding:1px 7px;border-radius:10px;font-size:10.5px;font-weight:700;background:${isPending?'#fef3c7':'#dcfce7'};color:${statusColor}">${statusLabel}</span>`;
+
+      html+=`<tr class="${paid?'row-credit':'row-debit'}">
+        <td class="num">${rowNum}</td>
+        <td class="nowrap">${fmtDate(p.paymentDate||p.dueDate)}</td>
+        <td class="nowrap" style="color:${isPending?'#f59e0b':'#9ca3af'}">${p.dueDate?fmtDate(p.dueDate):'—'}</td>
+        <td class="mono">${p.orNumber||'—'}</td>
+        <td>
+          <span class="type-tag ${paid?'credit':'debit'}">${paid?'CREDIT':'PENDING'}</span>
+          <span style="font-size:12px;margin-left:6px;color:#374151">Payment: ${modeLabel}${p.orNumber?' (OR# '+p.orNumber+')':''}</span>
+        </td>
+        <td>${statusBadge}</td>
+        <td class="right">${isPending?fmtCur(p.amount):'—'}</td>
+        <td class="right" style="color:#15803d">${paid?fmtCur(p.amount):'—'}</td>
+        <td class="right ${grandRunningBalance>0?'balance-positive':grandRunningBalance<0?'balance-negative':''}">${paid?fmtCur(grandRunningBalance):'<span style="color:#f59e0b;font-style:italic">'+fmtCur(grandRunningBalance)+'</span>'}</td>
+      </tr>`;
+    });
+
+    // Contract subtotal
+    html+=`</tbody><tfoot><tr>
+      <td colspan="6" style="font-weight:700;text-align:right">Subtotal — ${c.contractNumber||c.id.slice(0,8)}</td>
+      <td class="right">${fmtCur(cs.effectiveBilled)}</td>
+      <td class="right" style="color:#15803d">${fmtCur(cs.totalReceived)}</td>
+      <td class="right ${cs.balance>0?'balance-positive':''}">${fmtCur(cs.balance)}</td>
+    </tr></tfoot></table></div>`;
   });
-  const csv=[headers,...rows].map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:`pestastic_renewals_${Date.now()}.csv`});
-  a.click(); showToast(`Exported ${filteredContracts.length} renewal records.`);
-});
+
+  // Unassigned payments section
+  if(unassignedFiltered.length){
+    html+=`<div class="soa-section" style="margin-bottom:24px">
+      <div class="section-title">Unassigned Payments (No Contract Linked)</div>
+      <table class="soa-table"><thead><tr>
+        <th>#</th><th>Date</th><th>Due Date</th><th>OR No.</th><th>Description</th><th>Status</th>
+        <th class="right">Debit ₱</th><th class="right">Credit ₱</th><th class="right">Balance ₱</th>
+      </tr></thead><tbody>`;
+    unassignedFiltered.forEach(p=>{
+      const paid=isReceived(p);
+      rowNum++;
+      if(paid) grandRunningBalance-=Number(p.amount||0);
+      else grandRunningBalance+=Number(p.amount||0);
+      const modeLabel={'cash':'Cash','check':'Check','bank-transfer':'Bank Transfer','credit-card':'Credit Card','gcash':'GCash','maya':'Maya'}[p.paymentMode]||p.paymentMode||'—';
+      html+=`<tr class="${paid?'row-credit':'row-debit'}">
+        <td class="num">${rowNum}</td>
+        <td class="nowrap">${fmtDate(p.paymentDate||p.dueDate)}</td>
+        <td class="nowrap">${p.dueDate?fmtDate(p.dueDate):'—'}</td>
+        <td class="mono">${p.orNumber||'—'}</td>
+        <td><span class="type-tag ${paid?'credit':'debit'}">${paid?'CREDIT':'PENDING'}</span> <span style="font-size:12px;margin-left:6px;color:#374151">${modeLabel}</span></td>
+        <td><span style="font-size:10.5px;font-weight:700;color:${paid?'#15803d':'#f59e0b'}">${paid?(p.status||'Received'):'Pending'}</span></td>
+        <td class="right">${!paid?fmtCur(p.amount):'—'}</td>
+        <td class="right" style="color:#15803d">${paid?fmtCur(p.amount):'—'}</td>
+        <td class="right">${fmtCur(grandRunningBalance)}</td>
+      </tr>`;
+    });
+    html+=`</tbody></table></div>`;
+  }
+
+  // Grand totals table
+  html+=`<div class="soa-section">
+    <table class="soa-table"><tfoot><tr style="background:#1f2937!important">
+      <td colspan="6" style="font-weight:800;text-align:right;color:white;font-size:13px;border-color:#374151">GRAND TOTAL</td>
+      <td class="right" style="color:#fca5a5;border-color:#374151">${fmtCur(totalBilledAll)}</td>
+      <td class="right" style="color:#86efac;border-color:#374151">${fmtCur(totalPaidAll)}</td>
+      <td class="right" style="color:white;font-weight:900;border-color:#374151">${fmtCur(outstanding)}</td>
+    </tr></tfoot></table>
+  </div>`;
+
+  /* ── Summary box ── */
+  html+=`
+    <div class="summary-box">
+      <div class="sum-col">
+        <div class="sum-col-val">${fmtCur(totalBilledAll)}</div>
+        <div class="sum-col-lbl">Total Billed</div>
+      </div>
+      <div class="sum-col">
+        <div class="sum-col-val green">${fmtCur(totalPaidAll)}</div>
+        <div class="sum-col-lbl">Total Received</div>
+      </div>
+      <div class="sum-col">
+        <div class="sum-col-val" style="color:#f59e0b">${fmtCur(totalPendingAll)}</div>
+        <div class="sum-col-lbl">Total Pending</div>
+      </div>
+      <div class="sum-col">
+        <div class="sum-col-val ${outstanding>0?'red':''}">${fmtCur(outstanding)}</div>
+        <div class="sum-col-lbl">${outstanding>0?'Outstanding':'Settled'}</div>
+      </div>
+      <div class="sum-col">
+        <div class="sum-col-val neutral">${contracts.length}</div>
+        <div class="sum-col-lbl">Contracts</div>
+      </div>
+    </div>`;
+
+  /* ── System-generated footer ── */
+  html+=`
+    <div class="report-footer">
+      <span>${companyName}</span>
+      <span>Generated: ${genTime}</span>
+    </div>
+    <div class="sysgen-note">This is a system-generated document. For concerns, please contact ${companyName}.</div>`;
+
+  $('report-area').innerHTML=html;
+  $('btn-print').style.display='';
+}
 
 /* ── Auth ── */
 
-/* ── Sidebar & topbar notification badges ── */
 async function loadSidebarBadges() {
   /* Replaced by sidebar-badges live listener.
      Reads SUMMARY/DASHBOARD doc once with onSnapshot; was
@@ -1442,6 +836,7 @@ async function loadSidebarBadges() {
     mountSidebarBadges({ currentRole: (typeof currentRole !== 'undefined' ? currentRole : null) });
   } catch (e) { console.warn('[badges]', e?.message || e); }
 }
+
 onAuthStateChanged(auth, async user=>{
   if(!user){dismissLoadingScreen();window.location.replace('login.html');return;}
   currentUser=user;
@@ -1464,7 +859,19 @@ onAuthStateChanged(auth, async user=>{
     else $('user-initials').textContent=name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
     if(data.role==='admin'||data.role==='super_admin'){$('admin-nav-label').style.display='';$('nav-users').style.display='';}
     if(data.role==='super_admin')$('nav-settings').style.display='';
-    await loadAll();
+    await loadRefData();
+
+    // ── Auto-select client from URL param (e.g. from payments.html link) ──
+    const _urlParams = new URLSearchParams(window.location.search);
+    const _initCustomer = _urlParams.get('customer');
+    if (_initCustomer) {
+      const _c = allClients.find(x => x.customerNo === _initCustomer);
+      if (_c) {
+        selectedCustomerNo = _initCustomer;
+        searchInput.value = `${cleanName(_c.clientName)} (${_initCustomer})`;
+        generateSOA();
+      }
+    }
   }catch(err){dismissLoadingScreen();console.error(err);}
 });
 
@@ -1476,6 +883,24 @@ $('btn-signout').addEventListener('click',()=>{if(confirm('Sign out?'))signOut(a
 const sidebar=$('sidebar'),overlay=$('sidebar-overlay'),hamburger=$('hamburger');
 hamburger.addEventListener('click',()=>sidebar.classList.contains('open')?(sidebar.classList.remove('open'),overlay.classList.remove('open')):(sidebar.classList.add('open'),overlay.classList.add('open')));
 overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('open');});
+
+/* ── Before/after print: strip height/overflow constraints ── */
+window.addEventListener('beforeprint', function() {
+  const shell = document.getElementById('app-shell');
+  const wrapper = document.querySelector('.main-wrapper');
+  const content = document.querySelector('.page-content');
+  if(shell)   { shell._savedStyle = shell.style.cssText; shell.style.cssText = 'display:block!important;height:auto!important;overflow:visible!important;width:100%!important'; }
+  if(wrapper) { wrapper._savedStyle = wrapper.style.cssText; wrapper.style.cssText = 'display:block!important;margin-left:0!important;width:100%!important;height:auto!important;overflow:visible!important'; }
+  if(content) { content._savedStyle = content.style.cssText; content.style.cssText = 'display:block!important;height:auto!important;overflow:visible!important;padding:0!important;width:100%!important;flex:none!important'; }
+});
+window.addEventListener('afterprint', function() {
+  const shell = document.getElementById('app-shell');
+  const wrapper = document.querySelector('.main-wrapper');
+  const content = document.querySelector('.page-content');
+  if(shell && shell._savedStyle !== undefined)   shell.style.cssText = shell._savedStyle;
+  if(wrapper && wrapper._savedStyle !== undefined) wrapper.style.cssText = wrapper._savedStyle;
+  if(content && content._savedStyle !== undefined) content.style.cssText = content._savedStyle;
+});
 </script>
 </body>
 </html>
